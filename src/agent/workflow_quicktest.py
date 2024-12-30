@@ -2,7 +2,7 @@ import asyncio
 import os
 from dotenv import load_dotenv, find_dotenv
 
-from agent.AITA_Agent import AITA_Agent
+from .AITA_Agent import AITA_Agent
 
 from opentelemetry.sdk import trace as trace_sdk
 from opentelemetry.sdk.trace.export import SimpleSpanProcessor
@@ -11,7 +11,7 @@ from opentelemetry.exporter.otlp.proto.http.trace_exporter import (
 )
 from openinference.instrumentation.llama_index import LlamaIndexInstrumentor
 
-from agent.test_queries import TEST_QUERIES
+from test_queries import TEST_QUERIES
 
 # define the workflow to run
 AITA_workflow = AITA_Agent(

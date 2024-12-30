@@ -1,0 +1,6 @@
+- Run Vector Store Creation Script
+    python -m src.vector_store.vs_creation --dataset ['HF_DATASET_NAME']
+
+- Run Agent Evaluation Script
+    python -m src.agent.evaluation.eval --output-file ['OUTPUT_JSON_FILEPATH']
+

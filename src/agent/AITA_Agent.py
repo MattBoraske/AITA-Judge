@@ -23,7 +23,7 @@ from llama_index.postprocessor.cohere_rerank import CohereRerank
 from pinecone import Pinecone
 from llama_index.vector_stores.pinecone import PineconeVectorStore
 
-from agent.AITA_prompts import AITA_Prompt_Library
+from .AITA_prompts import AITA_Prompt_Library
 
 class RetrieverEvent(Event):
 
