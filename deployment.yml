@@ -1,0 +1,19 @@
+name: AITA_workflow
+
+control-plane:
+  port: 8000
+
+default-service: AITA_workflow
+
+services:
+  AITA_workflow:
+    name: AITA Workflow
+    # We tell LlamaDeploy where to look for our workflow
+    source:
+      # In this case, we instruct LlamaDeploy to look in the local filesystem
+      type: local
+      # The path in the local filesystem where to look. This assumes there's an src folder in the
+      # current working directory containing the file workflow.py we created previously
+      name: ./src
+    # This assumes the file workflow.py contains a variable called `AITA_workflow` containing our workflow instance
+    path: workflow:AITA_workflow
