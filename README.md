@@ -38,7 +38,7 @@ graph TD
     H --> J[Final Judgment]
 
     %% Style definitions
-    classDef default fill:#f9f9f9,stroke:#333,stroke-width:2px;
-    classDef refinement fill:#e6f3ff,stroke:#333,stroke-width:2px;
+    classDef default fill:#f9f9f9,stroke:#333,stroke-width:2px,color:black;
+    classDef refinement fill:#e6f3ff,stroke:#333,stroke-width:2px,color:black;
     class F,G,H,I,J refinement;
 ```
