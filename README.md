@@ -42,3 +42,6 @@ graph TD
     classDef refinement fill:#e6f3ff,stroke:#333,stroke-width:2px,color:black;
     class F,G,H,I,J refinement;
 ```
+## 🚀 Deployment
+
+Deployment using [llama-deploy](https://github.com/run-llama/llama_deploy) is a WIP. 
