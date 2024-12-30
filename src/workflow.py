@@ -39,9 +39,7 @@ async def single_response_CLI():
 
 # Make this script runnable from the shell to test the workflow execution
 if __name__ == "__main__":
-
-    # Load env variables
-    load_dotenv(find_dotenv())  # Load .env first
+    load_dotenv(find_dotenv())
 
     # Add Phoenix API Key for tracing
     os.environ["OTEL_EXPORTER_OTLP_HEADERS"] = f"api_key={os.getenv('PHOENIX_API_KEY')}"

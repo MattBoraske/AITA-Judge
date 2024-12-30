@@ -6,6 +6,8 @@ An LLM agent that evaluates "Am I The A**hole" (AITA) conflicts with a nuanced u
 
 This agent leverages [RAG (Retrieval-Augmented Generation)](https://docs.llamaindex.ai/en/stable/understanding/rag/) to analyze AITA scenarios by drawing insights from a database of nearly 40k conflicts sourced from the [r/amithea**hole](https://www.reddit.com/r/AmItheAsshole/) subreddit.
 
+The [dataset](https://huggingface.co/datasets/MattBoraske/reddit-AITA-submissions-and-comments-multiclass) of AITA conflicts is available on HuggingFace.
+
 ## 🛠️ Technical Architecture
 
 Under the hood, the agent is implemented as a [llamaindex workflow](https://docs.llamaindex.ai/en/stable/module_guides/workflow/) that progressively refines its judgment:
@@ -42,6 +44,19 @@ graph TD
     classDef refinement fill:#e6f3ff,stroke:#333,stroke-width:2px,color:black;
     class F,G,H,I,J refinement;
 ```
+## ⚡ Usage
+
+To use locally, set your API keys in a .env file in the root directory. At minimum, you need API keys for OpenAI, Cohere, and Pinecone.
+
+### Currently Supported Providers
+
+| Provider | LLM | Embeddings | Reranker | Vector Store | Environment Variable |
+|----------|-----|------------|-----------|--------------|---------------------|
+| OpenAI | ✅ | ✅ | ❌ | ❌ | `OPENAI_API_KEY` |
+| Grok | ✅ | ❌ | ❌ | ❌ | `GROK_API_KEY` |
+| Cohere | ❌ | ❌ | ✅ | ❌ | `COHERE_API_KEY` |
+| Pinecone | ❌ | ❌ | ❌ | ✅ | `PINECONE_API_KEY` |
+
 ## 🚀 Deployment
 
-Deployment using [llama-deploy](https://github.com/run-llama/llama_deploy) is a WIP. 
+Deployment using [llama-deploy](https://github.com/run-llama/llama_deploy) is a WIP.
