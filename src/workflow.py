@@ -19,7 +19,7 @@ AITA_workflow = AITA_Agent(
     timeout=300
 )
 
-async def main():
+async def single_response_CLI():
     async with asyncio.timeout(600):  # 10 minutes timeout
         # test query
         query = TEST_QUERIES[0]
@@ -59,4 +59,4 @@ if __name__ == "__main__":
     LlamaIndexInstrumentor().instrument(tracer_provider=tracer_provider)
 
     # Run workflow
-    asyncio.run(main())
+    asyncio.run(single_response_CLI())

@@ -13,7 +13,7 @@ Under the hood, the agent is implemented as a [llamaindex workflow](https://docs
 1. The agent is passed a new conflict.
 2. Similar conflicts are retrieved from the AITA database.
 - **Embeddings**: OpenAI's [`text-embedding-3-small`](https://platform.openai.com/docs/guides/embeddings/) model
-- **Vector Storage**: [Pinecone](https://www.pinecone.io/) vector database
+- **Vector Storage**: [Pinecone](https://www.pinecone.io/) vector store.
 - **Reranking**: [Cohere's reranker](https://cohere.com/rerank) for enhanced relevance
 1. The agent is given the top-ranked retrieved conflict and uses it as context when evaluating the input conflict.
 2. The agent is subsequentally given the conflict and uses it to refine its existing answer. 
