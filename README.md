@@ -1,4 +1,4 @@
-# AITA Evaluation Agent 🤖⚖️
+# AITA Judge Agent 🤖⚖️
 
 An LLM agent that evaluates "Am I The A**hole" (AITA) conflicts with a nuanced understanding that is backed by real-life evidence.
 
