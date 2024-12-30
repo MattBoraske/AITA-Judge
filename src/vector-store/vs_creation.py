@@ -5,6 +5,7 @@ from datasets import load_dataset
 from huggingface_hub import login
 import pandas as pd
 import os
+import argparse
 
 # create VectorStoreUtility object
 vs_util = VectorStoreUtility()
@@ -51,20 +52,45 @@ def create_dataset(hf_dataset_name: str) -> pd.DataFrame:
     # replace None values in dataframe
     df = vs_util.replace_none_values(df)
 
-    df = df[:20]
-
     return df
+
+def parse_arguments():
+    parser = argparse.ArgumentParser(description='Create a Pinecone vector store from AITA dataset.')
+    
+    parser.add_argument('--dataset', 
+                      type=str,
+                      default='MattBoraske/reddit-AITA-submissions-and-comments-multiclass',
+                      help='HuggingFace dataset name')
+    
+    parser.add_argument('--index-name',
+                      type=str,
+                      default='aita-text-embedding-3-large',
+                      help='Name of the Pinecone vector store index')
+    
+    parser.add_argument('--embed-provider',
+                      type=str,
+                      default='openai',
+                      help='Embedding model provider')
+    
+    parser.add_argument('--embed-endpoint',
+                      type=str,
+                      default='text-embedding-3-large',
+                      help='Embedding model endpoint')
+    
+    return parser.parse_args()
 
 if __name__ == '__main__':
     load_dotenv(find_dotenv())
     login(token=os.getenv('HUGGINGFACE_TOKEN'))
 
-    HF_DATASET = 'MattBoraske/reddit-AITA-submissions-and-comments-multiclass'
-    PINECONE_VS_INDEX = 'test-store-large'
-    EMBED_MODEL_PROVIDER = 'openai'
-    EMBED_MODEL_ENDPOINT = 'text-embedding-3-large'
+    # Parse command line arguments
+    args = parse_arguments()
 
-    dataset_df = create_dataset(HF_DATASET)
+    dataset_df = create_dataset(args.dataset)
 
-    create_pinecone_vs(dataset_df, PINECONE_VS_INDEX, EMBED_MODEL_PROVIDER, EMBED_MODEL_ENDPOINT)
-
+    create_pinecone_vs(
+        dataset_df, 
+        args.index_name, 
+        args.embed_provider, 
+        args.embed_endpoint
+    )

@@ -18,3 +18,8 @@ TO DO
 3. ultimately, would be cool to include a complete end to end tutorial (pipeline)
     - not sure if its worth it though... would be if we had a constant source of new data to index
         - maybe it would be though to run experiments on vector stores containing different 1) data subsets or 2) embeddings
+
+4. add code for dataset collection/creation (helps validate legitimacy of HF dataset)
+    - collection = making initial data files using reddit API
+    - creation = refinements done to create HF dataset used to train model
+    - store initial data file on S3 and include links to download them in the README
