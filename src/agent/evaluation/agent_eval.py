@@ -12,6 +12,8 @@ from opentelemetry.exporter.otlp.proto.http.trace_exporter import (
     OTLPSpanExporter as HTTPSpanExporter,
 )
 from openinference.instrumentation.llama_index import LlamaIndexInstrumentor
+from multiprocessing import freeze_support
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Run AITA Agent evaluation with custom parameters')
@@ -89,10 +91,6 @@ def run_evaluation(args):
     
     # collect responses
     responses = asyncio.run(eval_util.collect_responses(workflow, test_set))
-    
-    # save responses
-    with open(os.path.join(args.results_directory, args.responses_file), 'w') as f:
-        json.dump(responses, f)
 
     # evaluate responses
     eval_util.evaluate(
@@ -107,6 +105,10 @@ def run_evaluation(args):
         args.retrieval_eval_filepath,
         args.retrieval_eval_summary_filepath
     )
+
+    # save responses
+    with open(os.path.join(args.results_directory, args.responses_file), 'w') as f:
+        json.dump(responses, f)
 
 
 def setup_telemetry():
@@ -127,6 +129,7 @@ def setup_telemetry():
 
 if __name__ == '__main__':
     load_dotenv(find_dotenv())
-    args = parse_args()
+    freeze_support
     setup_telemetry()
+    args = parse_args()
     run_evaluation(args)

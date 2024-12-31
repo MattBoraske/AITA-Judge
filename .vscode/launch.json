@@ -8,9 +8,9 @@
             "module": "src.vector-store.vs_creation",
             "args": [
                 "--dataset", "MattBoraske/reddit-AITA-submissions-and-comments-multiclass",
-                "--index-name", "test-index",
+                "--index-name", "aita-text-embedding-3-large",
                 "--embed-provider", "openai",
-                "--embed-endpoint", "text-embedding-3-small",
+                "--embed-endpoint", "text-embedding-3-large",
                 //"--keep-info"
             ],
             "justMyCode": true
@@ -23,9 +23,9 @@
             "args": [
                 "--embedding-model", "text-embedding-3-large",
                 "--pinecone-index", "aita-text-embedding-3-large",
-                "--docs-to-retrieve", "10",
+                "--docs-to-retrieve", "3",
                 "--dataset", "MattBoraske/reddit-AITA-submissions-and-comments-multiclass",
-                "--samples-per-class", "3",
+                "--samples-per-class", "1",
                 "--results-directory", "eval_results",
             ],
             "justMyCode": true

@@ -9,6 +9,8 @@ from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 import seaborn as sns
 import evaluate
+from transformers import pipeline
+import torch
 
 class Evaluation_Utility():
     """
@@ -331,20 +333,44 @@ class Evaluation_Utility():
         references = [response['top_comment'] for response in responses]
         sources = [response['query'] for response in responses]
 
+        # ROGUE scores
         rouge_metric = evaluate.load("rouge")
         rouge = rouge_metric.compute(predictions=predictions, references=references)
         with open(os.path.join(results_directory, rouge_filepath), 'w') as f:
             json.dump(rouge, f)
 
+        # BLEU scores
         bleu_metric = evaluate.load("bleu")
         bleu = bleu_metric.compute(predictions=predictions, references=references)
         with open(os.path.join(results_directory, bleu_filepath), 'w') as f:
             json.dump(bleu, f)
 
+        # COMET scores
         comet_metric = evaluate.load('comet')
         comet_score = comet_metric.compute(predictions=predictions, references=references, sources=sources)
         with open(os.path.join(results_directory, comet_filepath), 'w') as f:
             json.dump(comet_score, f)
+
+        # Toxicity analysis
+        if torch.cuda.is_available():
+            toxicity_model = pipeline("text-classification", 
+                                      model="tomh/toxigen_roberta", 
+                                      truncation=True, 
+                                      device_map='cuda')
+        else:
+            toxicity_model = pipeline("text-classification", 
+                                      model="tomh/toxigen_roberta", 
+                                      truncation=True, 
+                                      device_map='cpu')
+        
+        toxicity_scores = []
+        for response in responses:
+            toxicity_scores.append(toxicity_model(response['response'])[0])
+
+        #######################
+        # FINISH IMPLEMENTING #
+        #######################
+        
 
     def evaluate_retrieval(
         self,

@@ -131,9 +131,6 @@ class VectorStoreUtility:
                 doc = Document(text=text, metadata=metadata)
                 documents.append(doc)
             
-            ### FOR TESTING ONLY
-            documents = documents[:10]
-            ###
             logger.info(f"Successfully converted {len(documents)} rows to documents")
             return documents
             
