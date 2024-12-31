@@ -2,20 +2,14 @@
 TO DO
 -----
 
-1. finish adding code for creating the pinecone vector store from the AITA huggingface dataset
-    - need to add a way to include an API key for huggingface
+1. add code for dataset collection/creation (helps validate legitimacy of HF dataset)
+    - collection = making initial data files using reddit API
+    - creation = refinements done to create HF dataset used to train model
+    - store initial data file on S3 and include links to download them in the README
 
-2. finish adding code to evaluate the agent on the AITA test dataset
-    - what should eval process look like?
-        - collect all the responses and store them somewhere (logging)
-        - parse out the classification and justification
-        - what metrics should we use?
-            - reuse code from thesis work?
-                - ultimately it would be nice to somehow be able to reuse this if the final research will include a comparison between the performance of the base models, finetuned models, and RAG agents.
-                - would include nice visualizations of things like confusion matrices
-        - save results locally for now
+2. toxicity eval for justifications
 
-3. ultimately, would be cool to include a complete end to end tutorial (pipeline)
+3. consider what an a complete end to end experiment pipeline would look like
     - not sure if its worth it though... would be if we had a constant source of new data to index
         - maybe it would be though to run experiments on vector stores containing different 1) data subsets or 2) embeddings
 
@@ -23,5 +17,3 @@ TO DO
     - collection = making initial data files using reddit API
     - creation = refinements done to create HF dataset used to train model
     - store initial data file on S3 and include links to download them in the README
-
-5. finish scripts.txt

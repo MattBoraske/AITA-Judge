@@ -32,12 +32,38 @@ def parse_args():
     parser.add_argument('--complete-dataset', action='store_true', default=False)
     parser.add_argument('--samples-per-class', type=int, default=1,
                       help='Number of samples per class for evaluation (default: 1)')
-    parser.add_argument('--output-file', type=str, default='AITA_RAG_Agent_eval_results.json',
-                      help='Output file path for results (default: AITA_RAG_Agent_eval_results.json)')
+    
+    # Output file parameters
+    parser.add_argument('--results-directory', type=str, default='eval_results',
+                        help='Output directory for evaluation results (default: eval_results)')
+    parser.add_argument('--responses-file', type=str, default='responses.json',
+                        help='Output JSON file path for responses (default: responses.json)')
+    parser.add_argument('--classification-report-filepath', type=str, default='classification_report.json',
+                        help='Output JSON file path for classification report (default: classification_report.json)')
+    parser.add_argument('--confusion-matrix-filepath', type=str, default='confusion_matrix.png',
+                        help='Output PNG file path for confusion matrix (default: confusion_matrix.png)')
+    parser.add_argument('--mcc-filepath', type=str, default='mcc_score.json',
+                        help='Output file path for Matthews Correlation Coefficent (MCC) (default: mcc_score.json)')
+    parser.add_argument('--rouge-filepath', type=str, default='rouge_score.json',
+                        help='Output file path for ROUGE score (default: rouge_score.json)')
+    parser.add_argument('--bleu-filepath', type=str, default='bleu_score.json',
+                        help='Output file path for BLEU score (default: bleu_score.json)')
+    parser.add_argument('--comet-filepath', type=str, default='comet_score.json',
+                        help='Output file path for COMET score (default: comet_score.json)')
+    parser.add_argument('--retrieval-eval-filepath', type=str, default='retrieval_eval.json',
+                        help='Output file path for retrieval evaluation (default: retrieval_eval.json)')
+    parser.add_argument('--retrieval-eval-summary-filepath', type=str, default='retrieval_eval_summary.json',
+                        help='Output file path for retrieval evaluation summary (default: retrieval_eval_summary.json)')
     
     return parser.parse_args()
 
 def run_evaluation(args):
+    # get eval util
+    eval_util = Evaluation_Utility()
+
+    # create results directory
+    os.makedirs(args.results_directory, exist_ok=True)
+
     # get the workflow
     workflow = AITA_Agent(
         timeout=args.timeout,
@@ -54,20 +80,34 @@ def run_evaluation(args):
     
     if not args.complete_dataset:
         # create the test set
-        test_set = Evaluation_Utility.create_balanced_test_set(
+        test_set = eval_util.create_balanced_test_set(
             AITA_test_df, 
             samples_per_class=args.samples_per_class
         )
     else:
-        test_set = Evaluation_Utility.create_test_set(AITA_test_df)
+        test_set = eval_util.create_test_set(AITA_test_df)
     
     # collect responses
-    responses = asyncio.run(Evaluation_Utility.collect_responses(workflow, test_set))
+    responses = asyncio.run(eval_util.collect_responses(workflow, test_set))
     
     # save responses
-    print(f'Saving responses to {args.output_file}')
-    with open(args.output_file, 'w') as f:
+    with open(os.path.join(args.results_directory, args.responses_file), 'w') as f:
         json.dump(responses, f)
+
+    # evaluate responses
+    eval_util.evaluate(
+        responses,
+        args.results_directory,
+        args.classification_report_filepath,
+        args.confusion_matrix_filepath,
+        args.mcc_filepath,
+        args.rouge_filepath,
+        args.bleu_filepath,
+        args.comet_filepath,
+        args.retrieval_eval_filepath,
+        args.retrieval_eval_summary_filepath
+    )
+
 
 def setup_telemetry():
     # Add Phoenix API Key for tracing

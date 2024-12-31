@@ -1,0 +1,34 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Create Vector Store",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "src.vector-store.vs_creation",
+            "module": "src.vector-store.vs_creation",
+            "args": [
+                "--dataset", "MattBoraske/reddit-AITA-submissions-and-comments-multiclass",
+                "--index-name", "aita-text-embedding-3-large",
+                "--embed-provider", "openai",
+                "--embed-endpoint", "text-embedding-3-large",
+            ],
+            "justMyCode": true
+        },
+        {
+            "name": "Agent Eval",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "src.agent.evaluation.agent_eval",
+            "args": [
+                "--embedding-model", "text-embedding-3-large",
+                "--pinecone-index", "aita-text-embedding-3-large",
+                "--docs-to-retrieve", "10",
+                "--dataset", "MattBoraske/reddit-AITA-submissions-and-comments-multiclass",
+                "--samples-per-class", "3",
+                "--results-directory", "eval_results",
+            ],
+            "justMyCode": true
+        },
+    ]
+}
