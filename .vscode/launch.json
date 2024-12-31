@@ -6,12 +6,12 @@
             "type": "debugpy",
             "request": "launch",
             "module": "src.vector-store.vs_creation",
-            "module": "src.vector-store.vs_creation",
             "args": [
                 "--dataset", "MattBoraske/reddit-AITA-submissions-and-comments-multiclass",
-                "--index-name", "aita-text-embedding-3-large",
+                "--index-name", "test-index",
                 "--embed-provider", "openai",
-                "--embed-endpoint", "text-embedding-3-large",
+                "--embed-endpoint", "text-embedding-3-small",
+                //"--keep-info"
             ],
             "justMyCode": true
         },

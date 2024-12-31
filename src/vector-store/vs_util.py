@@ -1,69 +1,177 @@
+"""
+Vector Store Utility Module
+
+This module provides the VectorStoreUtility class for managing vector store operations,
+including data preprocessing, document conversion, and vector store creation.
+"""
+
 import os
-from typing import List
-from pprint import pprint
+from typing import List, Dict, Any, Optional
+from dataclasses import dataclass
+import logging
+from pprint import pformat
 
 import pandas as pd
-
 from pinecone import Pinecone, ServerlessSpec
-
 from llama_index.embeddings.openai import OpenAIEmbedding
-from llama_index.core import VectorStoreIndex, StorageContext
+from llama_index.core import VectorStoreIndex, StorageContext, Document
 from llama_index.vector_stores.pinecone import PineconeVectorStore
 from llama_index.core.node_parser import SentenceSplitter
-from llama_index.core import Document
 
+# Configure logging
+logger = logging.getLogger(__name__)
+
+@dataclass
+class EmbeddingConfig:
+    """Configuration for embedding models."""
+    dimensions: int
+    supported_providers: List[str]
+    supported_endpoints: List[str]
+
+    @classmethod
+    def get_config(cls, provider: str, endpoint: str) -> 'EmbeddingConfig':
+        """
+        Get embedding configuration for specific provider and endpoint.
+        
+        Args:
+            provider: Embedding provider name
+            endpoint: Specific model endpoint
+            
+        Returns:
+            EmbeddingConfig for the specified provider and endpoint
+        """
+        if provider == "openai":
+            return cls(
+                dimensions=3072 if endpoint == "text-embedding-3-large" else 1536,
+                supported_providers=["openai"],
+                supported_endpoints=["text-embedding-3-small", "text-embedding-3-large"]
+            )
+        raise ValueError(f"Unsupported embedding provider: {provider}")
 
 class VectorStoreUtility:
+    """Utility class for vector store operations."""
+    
+    def __init__(self):
+        """Initialize VectorStoreUtility."""
+        self._pinecone_client: Optional[Pinecone] = None
+        
+    @property
+    def pinecone_client(self) -> Pinecone:
+        """
+        Lazy initialization of Pinecone client.
+        
+        Returns:
+            Initialized Pinecone client
+        """
+        if self._pinecone_client is None:
+            api_key = os.getenv('PINECONE_API_KEY')
+            if not api_key:
+                raise EnvironmentError("PINECONE_API_KEY not found in environment variables")
+            self._pinecone_client = Pinecone(api_key=api_key)
+        return self._pinecone_client
 
-    def replace_none_values(self, df):
-        # Replace None in top_comment columns with 'No Comment'
-        comment_cols = [col for col in df.columns if col.startswith('top_comment_') and not col.endswith('classification')]
-        for col in comment_cols:
-            df[col] = df[col].fillna('No Comment')
+    def replace_none_values(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Replace None values in the DataFrame with appropriate defaults.
         
-        # Replace None in classification columns with 'No Classification'
-        classification_cols = [col for col in df.columns if col.endswith('classification')]
-        for col in classification_cols:
-            df[col] = df[col].fillna('No Classification')
-        
-        return df
+        Args:
+            df: Input DataFrame
+            
+        Returns:
+            DataFrame with None values replaced
+        """
+        try:
+            # Create a copy to avoid modifying the original
+            df = df.copy()
+            
+            # Replace None in top comment columns
+            comment_cols = [col for col in df.columns if col.startswith('top_comment_') 
+                          and not col.endswith('classification')]
+            for col in comment_cols:
+                df[col] = df[col].fillna('No Comment')
+                logger.debug(f"Replaced None values in column: {col}")
+            
+            # Replace None in classification columns
+            classification_cols = [col for col in df.columns if col.endswith('classification')]
+            for col in classification_cols:
+                df[col] = df[col].fillna('No Classification')
+                logger.debug(f"Replaced None values in column: {col}")
+            
+            return df
+            
+        except Exception as e:
+            logger.error(f"Error replacing None values: {str(e)}")
+            raise
 
     def convert_df_to_documents(self, df: pd.DataFrame) -> List[Document]:
         """
         Convert DataFrame rows to LlamaIndex Documents.
-        Text will be concatenation of submission_title and submission_text.
-        Top comment and its classification will be stored as metadata.
-
+        
         Args:
-            df (pd.DataFrame): DataFrame with columns submission_title, submission_text,
-                            top_comment_1, and top_comment_1_classification
-
+            df: DataFrame with submission and comment data
+            
         Returns:
-            List[Document]: List of LlamaIndex Document objects
+            List of LlamaIndex Document objects
         """
-        documents = []
+        try:
+            documents = []
+            total_rows = len(df)
+            
+            for idx, row in df.iterrows():
+                if idx > 0 and idx % 1000 == 0:
+                    logger.info(f"Processed {idx}/{total_rows} rows")
+                
+                # Construct document text
+                text = self._create_document_text(row)
+                
+                # Create metadata
+                metadata = self._create_document_metadata(row)
+                
+                # Create document
+                doc = Document(text=text, metadata=metadata)
+                documents.append(doc)
+            
+            ### FOR TESTING ONLY
+            documents = documents[:10]
+            ###
+            logger.info(f"Successfully converted {len(documents)} rows to documents")
+            return documents
+            
+        except Exception as e:
+            logger.error(f"Error converting DataFrame to documents: {str(e)}")
+            raise
 
-        for _, row in df.iterrows():
-            # Combine title and text for document content
-            text = f"Title: {row['submission_title']}\n\nContent: {row['submission_text']}\n\nCorrect Classification: {row['top_comment_1_classification']}\n\nCorrect Justification: {row['top_comment_1']}"
+    def _create_document_text(self, row: pd.Series) -> str:
+        """
+        Create document text from row data.
+        
+        Args:
+            row: DataFrame row
+            
+        Returns:
+            Formatted document text
+        """
+        return (
+            f"Title: {row['submission_title']}\n\n"
+            f"Content: {row['submission_text']}\n\n"
+            f"Correct Classification: {row['top_comment_1_classification']}\n\n"
+            f"Correct Justification: {row['top_comment_1']}"
+        )
 
-            # Create metadata from top comment and classification
-            metadata = {}
-            #for i in range(1, 4):  # top 3 comments and their classifications stored as metadata
-            #    metadata[f'top_comment_{i}'] = row[f'top_comment_{i}']
-            #    metadata[f'top_comment_{i}_classification'] = row[f'top_comment_{i}_classification']
-            #metadata['submission_score'] = row['submission_score']
-            #metadata['submission_date'] = row['submission_date']
-            metadata['Submission URL'] = row['submission_url']
-            #metadata['ambiguity_score'] = row['ambiguity_score']
-
-            doc = Document(
-                text=text,
-                metadata=metadata
-            )
-            documents.append(doc)
-
-        return documents
+    def _create_document_metadata(self, row: pd.Series) -> Dict[str, Any]:
+        """
+        Create document metadata from row data.
+        
+        Args:
+            row: DataFrame row
+            
+        Returns:
+            Document metadata dictionary
+        """
+        return {
+            'Submission URL': row['submission_url']
+            # Add additional metadata fields as needed
+        }
 
     def create_pinecone_vs_index(
         self,
@@ -72,46 +180,98 @@ class VectorStoreUtility:
         embed_model_provider: str = "openai",
         embed_model_endpoint: str = "text-embedding-3-small"
     ) -> VectorStoreIndex:
-        # Create the vector store index and save it on pinecone
-        pc = Pinecone(api_key=os.getenv('PINECONE_API_KEY'))
+        """
+        Create a Pinecone vector store index.
+        
+        Args:
+            index_name: Name for the Pinecone index
+            documents: List of documents to index
+            embed_model_provider: Embedding model provider
+            embed_model_endpoint: Specific embedding model endpoint
+            
+        Returns:
+            Created VectorStoreIndex
+        """
+        try:
+            # Get embedding configuration
+            embed_config = EmbeddingConfig.get_config(embed_model_provider, embed_model_endpoint)
+            
+            logger.info(f"Creating Pinecone index: {index_name}")
+            logger.info(f"Using embedding model: {embed_model_provider}/{embed_model_endpoint}")
+            
+            # Create Pinecone index
+            self.pinecone_client.create_index(
+                name=index_name,
+                dimension=embed_config.dimensions,
+                metric="cosine",
+                spec=ServerlessSpec(cloud="aws", region="us-east-1")
+            )
+            
+            # Get index instance
+            pinecone_index = self.pinecone_client.Index(index_name)
+            
+            # Create vector store
+            vector_store = PineconeVectorStore(pinecone_index=pinecone_index)
+            storage_context = StorageContext.from_defaults(vector_store=vector_store)
+            
+            # Initialize embedding model
+            embed_model = self._initialize_embedding_model(embed_model_provider, embed_model_endpoint)
+            
+            # Configure node parser
+            parser = SentenceSplitter(chunk_size=8192)
+            
+            # Create and populate index
+            logger.info("Creating vector store index and embedding documents...")
+            index = VectorStoreIndex.from_documents(
+                documents=documents,
+                storage_context=storage_context,
+                embed_model=embed_model,
+                node_parser=parser,
+                show_progress=True
+            )
+            
+            # Log index description
+            self._log_index_description(index_name)
+            
+            return index
+            
+        except Exception as e:
+            logger.error(f"Error creating Pinecone vector store index: {str(e)}")
+            raise
 
-        if embed_model_endpoint != "text-embedding-3-small":
-            if embed_model_endpoint == "text-embedding-3-large":
-                vs_index_dimensions = 3072
-        else:
-            vs_index_dimensions = 1536 # text-embedding-3-small is default
+    def _initialize_embedding_model(
+        self,
+        provider: str,
+        endpoint: str
+    ) -> Any:
+        """
+        Initialize the embedding model.
+        
+        Args:
+            provider: Embedding model provider
+            endpoint: Specific model endpoint
+            
+        Returns:
+            Initialized embedding model
+        """
+        if provider == "openai":
+            api_key = os.getenv('OPENAI_API_KEY')
+            if not api_key:
+                raise EnvironmentError("OPENAI_API_KEY not found in environment variables")
+            return OpenAIEmbedding(model=endpoint, api_key=api_key)
+        
+        raise ValueError(f"Unsupported embedding provider: {provider}")
 
-        pc.create_index(
-            name=index_name,
-            dimension=vs_index_dimensions, # matches openAI's text-embedding-3-small
-            metric="cosine",
-            spec=ServerlessSpec(cloud="aws", region="us-east-1"),
-        )
-
-        pinecone_index = pc.Index(index_name)
-
-        vector_store = PineconeVectorStore(pinecone_index=pinecone_index)
-
-        storage_context = StorageContext.from_defaults(vector_store=vector_store)
-
-        if embed_model_provider != "openai":
-            pass # add other embedding models here
-        else: # use openai
-            embed_model = OpenAIEmbedding(model=embed_model_endpoint, api_key=os.getenv('OPENAI_API_KEY'))
-
-        parser = SentenceSplitter(chunk_size=8192)
-
-        index = VectorStoreIndex.from_documents(
-            documents=documents,
-            storage_context=storage_context,
-            embed_model=embed_model,
-            node_parser=parser,
-            show_progress=True
-        )
-
-        # print index description after inserting embeddings
-        print(f'\nVS Index Description:\n')
-        index_description = pc.describe_index(index_name)
-        pprint(index_description)
-
-        return index
+    def _log_index_description(self, index_name: str) -> None:
+        """
+        Log Pinecone index description.
+        
+        Args:
+            index_name: Name of the Pinecone index
+        """
+        try:
+            index_description = self.pinecone_client.describe_index(index_name)
+            logger.info("Vector Store Index Description:")
+            logger.info(pformat(index_description))
+        except Exception as e:
+            logger.warning(f"Failed to get index description: {str(e)}")
