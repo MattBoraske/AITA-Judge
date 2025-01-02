@@ -23,9 +23,9 @@
             "args": [
                 "--embedding-model", "text-embedding-3-large",
                 "--pinecone-index", "aita-text-embedding-3-large",
-                "--docs-to-retrieve", "3",
+                "--docs-to-retrieve", "5",
                 "--dataset", "MattBoraske/reddit-AITA-submissions-and-comments-multiclass",
-                "--samples-per-class", "1",
+                "--samples-per-class", "25",
                 "--results-directory", "eval_results",
             ],
             "justMyCode": true
