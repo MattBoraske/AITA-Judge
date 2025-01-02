@@ -1,3 +1,5 @@
+## NEED TO FIX THIS LATER
+
 llama-index
 llama-index-llms-groq
 llama-index-llms-openai
@@ -14,6 +16,6 @@ evaluate
 scikit-learn
 seaborn
 matplotlib
-torch
 rouge-score
 unbabel-comet
+torch

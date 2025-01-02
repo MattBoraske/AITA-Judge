@@ -11,6 +11,7 @@ import seaborn as sns
 import evaluate
 from transformers import pipeline
 import torch
+import numpy as np
 
 class Evaluation_Utility():
     """
@@ -185,6 +186,8 @@ class Evaluation_Utility():
         rouge_filepath: str,
         bleu_filepath: str,
         comet_filepath: str,
+        toxicity_stats_filepath: str,
+        toxicity_plot_filepath: str,
         retrieval_eval_filepath: str,
         retrieval_eval_summary_filepath: str
     ):
@@ -209,6 +212,14 @@ class Evaluation_Utility():
             Path to save BLEU scores
         comet_filepath : str
             Path to save COMET scores
+        toxicity_stats_filepath: str
+            Path to save toxicity scores
+        toxicity_plot_filepath: str
+            Path to save toxicity plot
+        retrieval_eval_filepath : str
+            Path to save detailed retrieval evaluation results for each query
+        retrieval_eval_summary_filepath : str
+            Path to save aggregated retrieval evaluation metrics
 
         Notes
         -----
@@ -231,7 +242,9 @@ class Evaluation_Utility():
             results_directory=results_directory,
             rouge_filepath=rouge_filepath,
             bleu_filepath=bleu_filepath,
-            comet_filepath=comet_filepath
+            comet_filepath=comet_filepath,
+            toxicity_stats_filepath=toxicity_stats_filepath,
+            toxicity_plot_filepath=toxicity_plot_filepath
         )
         print('\tEvaluating Retrieval...')
         self.evaluate_retrieval(
@@ -304,7 +317,9 @@ class Evaluation_Utility():
         results_directory: str,
         rouge_filepath: str,
         bleu_filepath: str,
-        comet_filepath: str
+        comet_filepath: str,
+        toxicity_stats_filepath: str,
+        toxicity_plot_filepath: str
     ):
         """
         Evaluate response justifications using multiple metrics.
@@ -321,6 +336,10 @@ class Evaluation_Utility():
             Path to save BLEU scores
         comet_filepath : str
             Path to save COMET scores
+        toxicity_stats_filepath: str
+            Path to save toxicity scores
+        toxicity_plot_filepath: str
+            Path to save toxicity plot
 
         Notes
         -----
@@ -346,31 +365,229 @@ class Evaluation_Utility():
             json.dump(bleu, f)
 
         # COMET scores
-        comet_metric = evaluate.load('comet')
-        comet_score = comet_metric.compute(predictions=predictions, references=references, sources=sources)
-        with open(os.path.join(results_directory, comet_filepath), 'w') as f:
-            json.dump(comet_score, f)
+        #comet_metric = evaluate.load('comet')
+        #comet_score = comet_metric.compute(predictions=predictions, references=references, sources=sources, batch_size=8)
+        #with open(os.path.join(results_directory, comet_filepath), 'w') as f:
+        #    json.dump(comet_score, f)
 
         # Toxicity analysis
         if torch.cuda.is_available():
+            print('Downloading toxicity classification model onto GPU...')
             toxicity_model = pipeline("text-classification", 
                                       model="tomh/toxigen_roberta", 
                                       truncation=True, 
                                       device_map='cuda')
         else:
+            print('Downloading toxicity classification model onto CPU...')
             toxicity_model = pipeline("text-classification", 
                                       model="tomh/toxigen_roberta", 
                                       truncation=True, 
                                       device_map='cpu')
         
-        toxicity_scores = []
         for response in responses:
-            toxicity_scores.append(toxicity_model(response['response'])[0])
+            predicted_response_score = toxicity_model(response['response'])[0]
+            if predicted_response_score['label'] == 'LABEL_0':
+                predicted_response_score['label'] = 'BENIGN'
+            else:
+                predicted_response_score['label'] = 'TOXIC'
+            response['predicted_response_toxicity'] = predicted_response_score
 
-        #######################
-        # FINISH IMPLEMENTING #
-        #######################
+            true_response_score = toxicity_model(response['top_comment'])[0]
+            if true_response_score['label'] == 'LABEL_0':
+                true_response_score['label'] = 'BENIGN'
+            else:
+                true_response_score['label'] = 'TOXIC'
+            response['true_response_toxicity'] = true_response_score
+
+        predicted_toxicity_scores = [{'score': response['predicted_response_toxicity']['score'], 'label': response['predicted_response_toxicity']['label']} for response in responses]
+        true_toxicity_scores = [{'score': response['true_response_toxicity']['score'], 'label': response['true_response_toxicity']['label']} for response in responses]
+
+        predicted_toxicity_scores = [
+            -s['score'] if s['label'] == 'TOXIC' else s['score'] 
+            for s in predicted_toxicity_scores
+        ]
+        true_toxicity_scores = [
+            -s['score'] if s['label'] == 'TOXIC' else s['score']
+            for s in true_toxicity_scores
+        ]
+
+        # compute toxicity stats
+        toxicity_stats = self.get_toxicity_stats(predicted_toxicity_scores, true_toxicity_scores)
+
+        # save toxicity stats
+        with open(os.path.join(results_directory, toxicity_stats_filepath), 'w') as f:
+            json.dump(toxicity_stats, f)
+
+        self.plot_toxicity_scores(
+            predicted_toxicity_scores,
+            true_toxicity_scores,
+            toxicity_plot_filepath=os.path.join(results_directory, toxicity_plot_filepath),
+            toxicity_stats=toxicity_stats,
+        )
+
+    def get_toxicity_stats(
+            self,
+            predicted_toxicity_scores: list[dict],
+            true_toxicity_scores: list[dict]
+        ) -> dict:
+            """
+            Compute statistics for a list of toxicity scores.
+            """
+
+            predicted_mean_score = round(np.mean(predicted_toxicity_scores), 3)
+            predicted_median_score = round(np.median(predicted_toxicity_scores), 3)
+            predicted_benign_count = sum(1 for s in predicted_toxicity_scores if s >= 0)
+            predicted_toxic_count = sum(1 for s in predicted_toxicity_scores if s < 0)
+
+            true_mean_score = round(np.mean(true_toxicity_scores), 3)
+            true_median_score = round(np.median(true_toxicity_scores), 3)
+            true_benign_count = sum(1 for s in true_toxicity_scores if s >= 0)
+            true_toxic_count = sum(1 for s in true_toxicity_scores if s < 0)
+
+            percent_change_mean = round(((predicted_mean_score - true_mean_score) / true_mean_score) * 100, 2)
+            percent_change_median = round(((predicted_median_score - true_median_score) / true_median_score) * 100, 2)
+            total_change_benign = predicted_benign_count - true_benign_count
+            total_change_toxic = predicted_toxic_count - true_toxic_count
+            percent_change_benign = 'N/A' if true_benign_count == 0 else round(((predicted_benign_count - true_benign_count) / true_benign_count) * 100, 2)
+            percent_change_toxic = 'N/A' if true_toxic_count == 0 else round(((predicted_toxic_count - true_toxic_count) / true_toxic_count) * 100, 2)
+
+            return {
+                'predicted_response_toxicity_stats': 
+                    {
+                        'mean_score': predicted_mean_score,
+                        'median_score': predicted_median_score,
+                        'benign_count': predicted_benign_count,
+                        'toxic_count': predicted_toxic_count,
+                    },
+                'true_response_toxicity_stats':
+                    {
+                        'mean_score': true_mean_score,
+                        'median_score': true_median_score,
+                        'benign_count': true_benign_count,
+                        'toxic_count': true_toxic_count,
+                    },
+                'change_stats:':
+                    {
+                        'percent_change_mean': percent_change_mean,
+                        'percent_change_median': percent_change_median,
+                        'total_change_benign': total_change_benign,
+                        'total_change_toxic': total_change_toxic,
+                        'percent_change_benign': percent_change_benign,
+                        'percent_change_toxic': percent_change_toxic,
+                    }
+            }
+
+    def plot_toxicity_scores(
+        self,
+        predicted_toxicity_scores: list[dict],
+        true_toxicity_scores: list[dict],
+        toxicity_plot_filepath: str,
+        toxicity_stats = dict[dict],
+        bins: int = 40,
+        figsize: tuple = (20, 7),
+        labels: str =("Predicted Responses", "True Responses"),
+    ):
+        """
+        Create an improved histogram of toxicity scores with better visualization and labeling.
         
+        Args:
+            predicted_toxicity_scores: List of dictionaries containing toxicity scores and labels for predicted responses
+            true_toxicity_scores: List of dictionaries containing toxicity scores and labels for true responses
+            toxicity_plot_filepath: Path to save toxicity plot
+            toxicity_stats: Dictionary containing statistics for predicted responses
+            bins: Number of bins for the histogram
+            figsize: Tuple specifying figure dimensions
+            labels: Tuple of strings for labeling the two datasets
+        """
+        import matplotlib.pyplot as plt
+        import numpy as np
+        from matplotlib.patches import Patch
+                
+        # Create the figure and axis
+        fig, ax = plt.subplots(figsize=figsize)
+        
+        # Define colors for each dataset
+        colors = {
+            'hist1': 'skyblue',
+            'hist2': 'lightgreen',
+        }
+        
+        # Create histograms
+        plt.hist(
+            predicted_toxicity_scores,
+            bins=bins,
+            edgecolor='black',
+            linewidth=1.2,
+            alpha=0.5,
+            color=colors['hist1'],
+            label=f'Histogram ({labels[0]})'
+        )
+        
+        plt.hist(
+            true_toxicity_scores,
+            bins=bins,
+            edgecolor='black',
+            linewidth=1.2,
+            alpha=0.5,
+            color=colors['hist2'],
+            label=f'Histogram ({labels[1]})'
+        )
+        
+        # Customize the plot
+        ax.set_xlabel('Confidence Score', fontsize=14, labelpad=10)
+        ax.set_ylabel('Count', fontsize=14)
+        ax.set_title('Confidence Scores for Response Toxicity', fontsize=16, pad=20)
+        
+        # Add vertical line at 0
+        plt.axvline(x=0, color='black', linestyle='--', alpha=0.5, linewidth=2)
+        
+        # Set x-axis limits and ticks
+        plt.xlim(-1, 1)
+        plt.xticks(np.arange(-1, 1.2, 0.2))
+        
+        # Add grid
+        plt.grid(True, alpha=0.3, linestyle='--')
+        
+        # Add text labels for toxic and benign regions
+        plt.text(-0.6, plt.gca().get_ylim()[1]*0.95, 'TOXIC', fontsize=14)
+        plt.text(0.4, plt.gca().get_ylim()[1]*0.95, 'BENIGN', fontsize=14)
+        
+        # Create two separate legends
+        # First legend for dataset 1
+        legend1_elements = [
+            Patch(facecolor=colors['hist1'], alpha=0.5, edgecolor='black', label=labels[0]),
+            Patch(facecolor='none', label=f"Mean: {toxicity_stats['predicted_response_toxicity_stats']['mean_score']:.2f}"),
+            Patch(facecolor='none', label=f"Median: {toxicity_stats['predicted_response_toxicity_stats']['median_score']:.2f}"),
+            Patch(facecolor='none', label=f"Benign Responses: {toxicity_stats['predicted_response_toxicity_stats']['benign_count']}"),
+            Patch(facecolor='none', label=f"Toxic Responses: {toxicity_stats['predicted_response_toxicity_stats']['toxic_count']}")
+        ]
+        
+        # Second legend for dataset 2
+        legend2_elements = [
+            Patch(facecolor=colors['hist2'], alpha=0.5, edgecolor='black', label=labels[1]),
+            Patch(facecolor='none', label=f"Mean: {toxicity_stats['true_response_toxicity_stats']['mean_score']:.2f}"),
+            Patch(facecolor='none', label=f"Median: {toxicity_stats['true_response_toxicity_stats']['median_score']:.2f}"),
+            Patch(facecolor='none', label=f"Benign Responses: {toxicity_stats['true_response_toxicity_stats']['benign_count']}"),
+            Patch(facecolor='none', label=f"Toxic Responses: {toxicity_stats['true_response_toxicity_stats']['toxic_count']}")
+        ]
+        
+        # Add the legends with reduced spacing and closer to the plot
+        legend1 = plt.legend(handles=legend1_elements, bbox_to_anchor=(1.02, 1), loc='upper left', prop={'size': 12})  # Changed from 1.15 to 1.02
+        plt.gca().add_artist(legend1)
+        
+        #legend2 = plt.legend(handles=legend2_elements, bbox_to_anchor=(1.02, 0.75), loc='upper left')  # Changed from 1.15 to 1.02
+        #plt.gca().add_artist(legend2)
+        plt.legend(handles=legend2_elements, bbox_to_anchor=(1.02, 0.75), loc='upper left', prop={'size': 12})  # Changed from 1.15 to 1.02
+        
+        # Add explanatory note below legends
+        plt.figtext(0.7475, 0.49, '*Negative scores indicate\ntoxic classifications while\n positive ones are benign.', fontsize=12, ha='center', va='top')
+                
+        # Adjust layout with modified spacing
+        plt.tight_layout(rect=[0, 0, 0.82, 1])  # Changed from 0.85 to 0.82
+        
+        # Save the plot
+        plt.savefig(toxicity_plot_filepath, dpi=300, bbox_inches='tight')
+        plt.close()  
 
     def evaluate_retrieval(
         self,

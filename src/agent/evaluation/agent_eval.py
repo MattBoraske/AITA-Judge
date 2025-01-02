@@ -40,8 +40,8 @@ def parse_args():
                         help='Output directory for evaluation results (default: eval_results)')
     parser.add_argument('--responses-file', type=str, default='responses.json',
                         help='Output JSON file path for responses (default: responses.json)')
-    parser.add_argument('--classification-report-filepath', type=str, default='classification_report.json',
-                        help='Output JSON file path for classification report (default: classification_report.json)')
+    parser.add_argument('--classification-report-filepath', type=str, default='classification_report.txt',
+                        help='Output JSON file path for classification report (default: classification_report.txt)')
     parser.add_argument('--confusion-matrix-filepath', type=str, default='confusion_matrix.png',
                         help='Output PNG file path for confusion matrix (default: confusion_matrix.png)')
     parser.add_argument('--mcc-filepath', type=str, default='mcc_score.json',
@@ -52,6 +52,10 @@ def parse_args():
                         help='Output file path for BLEU score (default: bleu_score.json)')
     parser.add_argument('--comet-filepath', type=str, default='comet_score.json',
                         help='Output file path for COMET score (default: comet_score.json)')
+    parser.add_argument('--toxicity-stats-filepath', type=str, default='toxicity_stats.json',
+                        help='Output file path for toxicity statistics (default: toxicity_stats.json)')
+    parser.add_argument('--toxicity-plot-filepath', type=str, default='toxicity_plot.png',
+                        help='Output file path for toxicity plot (default: toxicity_plot.png)')
     parser.add_argument('--retrieval-eval-filepath', type=str, default='retrieval_eval.json',
                         help='Output file path for retrieval evaluation (default: retrieval_eval.json)')
     parser.add_argument('--retrieval-eval-summary-filepath', type=str, default='retrieval_eval_summary.json',
@@ -102,6 +106,8 @@ def run_evaluation(args):
         args.rouge_filepath,
         args.bleu_filepath,
         args.comet_filepath,
+        args.toxicity_stats_filepath,
+        args.toxicity_plot_filepath,
         args.retrieval_eval_filepath,
         args.retrieval_eval_summary_filepath
     )
