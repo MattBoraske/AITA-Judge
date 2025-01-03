@@ -2,6 +2,8 @@
 TO DO
 -----
 
+0. add way to store agent parameters (num docs retrieved, vs_index, llm_endpoint, etc.) with results
+
 1. add directory where logs are stored for vs_creation requirements
 
 2. fix requirements.txt

@@ -1,0 +1,10 @@
+              precision    recall  f1-score   support
+
+         NTA       0.91      0.83      0.87       823
+         YTA       0.32      0.65      0.43       113
+         NAH       0.38      0.08      0.13        38
+         ESH       0.12      0.08      0.09        26
+
+    accuracy                           0.76      1000
+   macro avg       0.43      0.41      0.38      1000
+weighted avg       0.80      0.76      0.77      1000

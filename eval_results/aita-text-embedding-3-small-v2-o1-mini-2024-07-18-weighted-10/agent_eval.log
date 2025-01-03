@@ -1,0 +1,670 @@
+2025-01-03 11:01:30,530 - __main__ - INFO - Starting AITA Agent evaluation script
+2025-01-03 11:01:30,533 - __main__ - INFO - Setting up telemetry
+2025-01-03 11:01:30,625 - __main__ - INFO - Telemetry setup completed successfully
+2025-01-03 11:01:30,626 - __main__ - INFO - Starting evaluation process
+2025-01-03 11:01:30,626 - __main__ - INFO - Initializing Evaluation Utility
+2025-01-03 11:01:30,626 - src.agent.evaluation.eval_util - INFO - Initialized Evaluation_Utility
+2025-01-03 11:01:30,627 - __main__ - INFO - Initializing AITA Agent workflow
+2025-01-03 11:01:30,627 - __main__ - INFO - Loading dataset from MattBoraske/reddit-AITA-submissions-and-comments-multiclass
+2025-01-03 11:01:32,962 - __main__ - INFO - Dataset size after filtering: 9867
+2025-01-03 11:01:32,963 - __main__ - INFO - Creating test set
+2025-01-03 11:01:32,963 - src.agent.evaluation.eval_util - INFO - Creating test set using weighted sampling strategy
+2025-01-03 11:01:32,981 - src.agent.evaluation.eval_util - INFO - Created weighted test set with 10 total samples
+2025-01-03 11:01:32,985 - src.agent.evaluation.eval_util - INFO - Successfully created test set with 10 samples
+2025-01-03 11:01:32,986 - __main__ - INFO - Final test set size: 10
+2025-01-03 11:01:32,986 - __main__ - INFO - Starting response collection
+2025-01-03 11:01:32,988 - src.agent.evaluation.eval_util - INFO - Starting response collection for 10 samples
+2025-01-03 11:01:32,998 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 11:01:32,999 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 11:01:33,041 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 11:01:35,551 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 11:01:40,027 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 11:01:40,700 - asyncio - ERROR - Exception in callback Dispatcher.span.<locals>.wrapper.<locals>.handle_future_result(span_id='Workflow.run...-e4ca2b820389', bound_args=<BoundArgumen...ice?\n\n**"})>, instance=<src.agent.AI...0015A93FB9050>, context=<_contextvars...0015A957F37C0>)(<WorkflowHand...bo-16k-0613")>) at c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py:273
+handle: <Handle Dispatcher.span.<locals>.wrapper.<locals>.handle_future_result(span_id='Workflow.run...-e4ca2b820389', bound_args=<BoundArgumen...ice?\n\n**"})>, instance=<src.agent.AI...0015A93FB9050>, context=<_contextvars...0015A957F37C0>)(<WorkflowHand...bo-16k-0613")>) at c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py:273>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\workflow\workflow.py", line 247, in _task
+    new_ev = await instrumented_step(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py", line 367, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\src\agent\AITA_Agent.py", line 116, in synthesize
+    response_synthesizer = get_response_synthesizer(
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\response_synthesizers\factory.py", line 63, in get_response_synthesizer
+    llm.metadata,
+    ^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\llms\openai\base.py", line 336, in metadata
+    context_window=openai_modelname_to_contextsize(self._get_model_name()),
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\llms\openai\utils.py", line 235, in openai_modelname_to_contextsize
+    raise ValueError(
+ValueError: Unknown model 'o1-mini-2024-07-18'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\mattb\AppData\Local\Programs\Python\Python311\Lib\asyncio\events.py", line 84, in _run
+    self._context.run(self._callback, *self._args)
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py", line 285, in handle_future_result
+    raise exception
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\workflow\workflow.py", line 440, in _run_workflow
+    raise exception_raised
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\workflow\workflow.py", line 254, in _task
+    raise WorkflowRuntimeError(
+llama_index.core.workflow.errors.WorkflowRuntimeError: Error in step 'synthesize': Unknown model 'o1-mini-2024-07-18'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+2025-01-03 11:01:40,716 - src.agent.evaluation.eval_util - WARNING - Error processing sample 0: Error in step 'synthesize': Unknown model 'o1-mini-2024-07-18'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+2025-01-03 11:01:40,719 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 11:01:40,720 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 11:01:40,720 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 11:01:41,122 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 11:01:42,537 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 11:01:42,885 - asyncio - ERROR - Exception in callback Dispatcher.span.<locals>.wrapper.<locals>.handle_future_result(span_id='Workflow.run...-5c27ac9c0847', bound_args=<BoundArgumen...he awards!'})>, instance=<src.agent.AI...0015A93FB9050>, context=<_contextvars...0015A957DD900>)(<WorkflowHand...bo-16k-0613")>) at c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py:273
+handle: <Handle Dispatcher.span.<locals>.wrapper.<locals>.handle_future_result(span_id='Workflow.run...-5c27ac9c0847', bound_args=<BoundArgumen...he awards!'})>, instance=<src.agent.AI...0015A93FB9050>, context=<_contextvars...0015A957DD900>)(<WorkflowHand...bo-16k-0613")>) at c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py:273>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\workflow\workflow.py", line 247, in _task
+    new_ev = await instrumented_step(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py", line 367, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\src\agent\AITA_Agent.py", line 116, in synthesize
+    response_synthesizer = get_response_synthesizer(
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\response_synthesizers\factory.py", line 63, in get_response_synthesizer
+    llm.metadata,
+    ^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\llms\openai\base.py", line 336, in metadata
+    context_window=openai_modelname_to_contextsize(self._get_model_name()),
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\llms\openai\utils.py", line 235, in openai_modelname_to_contextsize
+    raise ValueError(
+ValueError: Unknown model 'o1-mini-2024-07-18'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\mattb\AppData\Local\Programs\Python\Python311\Lib\asyncio\events.py", line 84, in _run
+    self._context.run(self._callback, *self._args)
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py", line 285, in handle_future_result
+    raise exception
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\workflow\workflow.py", line 440, in _run_workflow
+    raise exception_raised
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\workflow\workflow.py", line 254, in _task
+    raise WorkflowRuntimeError(
+llama_index.core.workflow.errors.WorkflowRuntimeError: Error in step 'synthesize': Unknown model 'o1-mini-2024-07-18'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+2025-01-03 11:01:42,890 - src.agent.evaluation.eval_util - WARNING - Error processing sample 1: Error in step 'synthesize': Unknown model 'o1-mini-2024-07-18'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+2025-01-03 11:01:42,893 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 11:01:42,894 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 11:01:42,894 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 11:01:43,474 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 11:01:44,753 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 11:01:45,120 - asyncio - ERROR - Exception in callback Dispatcher.span.<locals>.wrapper.<locals>.handle_future_result(span_id='Workflow.run...-1ecbcc281ebc', bound_args=<BoundArgumen...s i guess.'})>, instance=<src.agent.AI...0015A93FB9050>, context=<_contextvars...0015AA5463EC0>)(<WorkflowHand...bo-16k-0613")>) at c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py:273
+handle: <Handle Dispatcher.span.<locals>.wrapper.<locals>.handle_future_result(span_id='Workflow.run...-1ecbcc281ebc', bound_args=<BoundArgumen...s i guess.'})>, instance=<src.agent.AI...0015A93FB9050>, context=<_contextvars...0015AA5463EC0>)(<WorkflowHand...bo-16k-0613")>) at c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py:273>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\workflow\workflow.py", line 247, in _task
+    new_ev = await instrumented_step(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py", line 367, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\src\agent\AITA_Agent.py", line 116, in synthesize
+    response_synthesizer = get_response_synthesizer(
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\response_synthesizers\factory.py", line 63, in get_response_synthesizer
+    llm.metadata,
+    ^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\llms\openai\base.py", line 336, in metadata
+    context_window=openai_modelname_to_contextsize(self._get_model_name()),
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\llms\openai\utils.py", line 235, in openai_modelname_to_contextsize
+    raise ValueError(
+ValueError: Unknown model 'o1-mini-2024-07-18'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\mattb\AppData\Local\Programs\Python\Python311\Lib\asyncio\events.py", line 84, in _run
+    self._context.run(self._callback, *self._args)
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py", line 285, in handle_future_result
+    raise exception
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\workflow\workflow.py", line 440, in _run_workflow
+    raise exception_raised
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\workflow\workflow.py", line 254, in _task
+    raise WorkflowRuntimeError(
+llama_index.core.workflow.errors.WorkflowRuntimeError: Error in step 'synthesize': Unknown model 'o1-mini-2024-07-18'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+2025-01-03 11:01:45,124 - src.agent.evaluation.eval_util - WARNING - Error processing sample 2: Error in step 'synthesize': Unknown model 'o1-mini-2024-07-18'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+2025-01-03 11:01:45,128 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 11:01:45,129 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 11:01:45,129 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 11:01:45,575 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 11:01:46,827 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 11:01:47,185 - asyncio - ERROR - Exception in callback Dispatcher.span.<locals>.wrapper.<locals>.handle_future_result(span_id='Workflow.run...-2204be2e56e5', bound_args=<BoundArgumen...?\n\nsmall'})>, instance=<src.agent.AI...0015A93FB9050>, context=<_contextvars...0015B09948C80>)(<WorkflowHand...bo-16k-0613")>) at c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py:273
+handle: <Handle Dispatcher.span.<locals>.wrapper.<locals>.handle_future_result(span_id='Workflow.run...-2204be2e56e5', bound_args=<BoundArgumen...?\n\nsmall'})>, instance=<src.agent.AI...0015A93FB9050>, context=<_contextvars...0015B09948C80>)(<WorkflowHand...bo-16k-0613")>) at c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py:273>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\workflow\workflow.py", line 247, in _task
+    new_ev = await instrumented_step(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py", line 367, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\src\agent\AITA_Agent.py", line 116, in synthesize
+    response_synthesizer = get_response_synthesizer(
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\response_synthesizers\factory.py", line 63, in get_response_synthesizer
+    llm.metadata,
+    ^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\llms\openai\base.py", line 336, in metadata
+    context_window=openai_modelname_to_contextsize(self._get_model_name()),
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\llms\openai\utils.py", line 235, in openai_modelname_to_contextsize
+    raise ValueError(
+ValueError: Unknown model 'o1-mini-2024-07-18'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\mattb\AppData\Local\Programs\Python\Python311\Lib\asyncio\events.py", line 84, in _run
+    self._context.run(self._callback, *self._args)
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py", line 285, in handle_future_result
+    raise exception
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\workflow\workflow.py", line 440, in _run_workflow
+    raise exception_raised
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\workflow\workflow.py", line 254, in _task
+    raise WorkflowRuntimeError(
+llama_index.core.workflow.errors.WorkflowRuntimeError: Error in step 'synthesize': Unknown model 'o1-mini-2024-07-18'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+2025-01-03 11:01:47,189 - src.agent.evaluation.eval_util - WARNING - Error processing sample 3: Error in step 'synthesize': Unknown model 'o1-mini-2024-07-18'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+2025-01-03 11:01:47,193 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 11:01:47,193 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 11:01:47,194 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 11:01:47,700 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 11:01:48,942 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 11:01:49,276 - asyncio - ERROR - Exception in callback Dispatcher.span.<locals>.wrapper.<locals>.handle_future_result(span_id='Workflow.run...-ac2bf60bbe0a', bound_args=<BoundArgumen...are about.'})>, instance=<src.agent.AI...0015A93FB9050>, context=<_contextvars...0015B098D6280>)(<WorkflowHand...bo-16k-0613")>) at c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py:273
+handle: <Handle Dispatcher.span.<locals>.wrapper.<locals>.handle_future_result(span_id='Workflow.run...-ac2bf60bbe0a', bound_args=<BoundArgumen...are about.'})>, instance=<src.agent.AI...0015A93FB9050>, context=<_contextvars...0015B098D6280>)(<WorkflowHand...bo-16k-0613")>) at c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py:273>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\workflow\workflow.py", line 247, in _task
+    new_ev = await instrumented_step(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py", line 367, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\src\agent\AITA_Agent.py", line 116, in synthesize
+    response_synthesizer = get_response_synthesizer(
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\response_synthesizers\factory.py", line 63, in get_response_synthesizer
+    llm.metadata,
+    ^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\llms\openai\base.py", line 336, in metadata
+    context_window=openai_modelname_to_contextsize(self._get_model_name()),
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\llms\openai\utils.py", line 235, in openai_modelname_to_contextsize
+    raise ValueError(
+ValueError: Unknown model 'o1-mini-2024-07-18'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\mattb\AppData\Local\Programs\Python\Python311\Lib\asyncio\events.py", line 84, in _run
+    self._context.run(self._callback, *self._args)
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py", line 285, in handle_future_result
+    raise exception
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\workflow\workflow.py", line 440, in _run_workflow
+    raise exception_raised
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\workflow\workflow.py", line 254, in _task
+    raise WorkflowRuntimeError(
+llama_index.core.workflow.errors.WorkflowRuntimeError: Error in step 'synthesize': Unknown model 'o1-mini-2024-07-18'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+2025-01-03 11:01:49,280 - src.agent.evaluation.eval_util - WARNING - Error processing sample 4: Error in step 'synthesize': Unknown model 'o1-mini-2024-07-18'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+2025-01-03 11:01:49,284 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 11:01:49,285 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 11:01:49,285 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 11:01:49,887 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 11:01:51,257 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 11:01:51,642 - asyncio - ERROR - Exception in callback Dispatcher.span.<locals>.wrapper.<locals>.handle_future_result(span_id='Workflow.run...-136fac897197', bound_args=<BoundArgumen... reacting?"})>, instance=<src.agent.AI...0015A93FB9050>, context=<_contextvars...0015B0987BB00>)(<WorkflowHand...bo-16k-0613")>) at c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py:273
+handle: <Handle Dispatcher.span.<locals>.wrapper.<locals>.handle_future_result(span_id='Workflow.run...-136fac897197', bound_args=<BoundArgumen... reacting?"})>, instance=<src.agent.AI...0015A93FB9050>, context=<_contextvars...0015B0987BB00>)(<WorkflowHand...bo-16k-0613")>) at c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py:273>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\workflow\workflow.py", line 247, in _task
+    new_ev = await instrumented_step(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py", line 367, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\src\agent\AITA_Agent.py", line 116, in synthesize
+    response_synthesizer = get_response_synthesizer(
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\response_synthesizers\factory.py", line 63, in get_response_synthesizer
+    llm.metadata,
+    ^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\llms\openai\base.py", line 336, in metadata
+    context_window=openai_modelname_to_contextsize(self._get_model_name()),
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\llms\openai\utils.py", line 235, in openai_modelname_to_contextsize
+    raise ValueError(
+ValueError: Unknown model 'o1-mini-2024-07-18'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\mattb\AppData\Local\Programs\Python\Python311\Lib\asyncio\events.py", line 84, in _run
+    self._context.run(self._callback, *self._args)
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py", line 285, in handle_future_result
+    raise exception
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\workflow\workflow.py", line 440, in _run_workflow
+    raise exception_raised
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\workflow\workflow.py", line 254, in _task
+    raise WorkflowRuntimeError(
+llama_index.core.workflow.errors.WorkflowRuntimeError: Error in step 'synthesize': Unknown model 'o1-mini-2024-07-18'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+2025-01-03 11:01:51,647 - src.agent.evaluation.eval_util - WARNING - Error processing sample 5: Error in step 'synthesize': Unknown model 'o1-mini-2024-07-18'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+2025-01-03 11:01:51,651 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 11:01:51,652 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 11:01:51,652 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 11:01:52,068 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 11:01:53,304 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 11:01:53,649 - asyncio - ERROR - Exception in callback Dispatcher.span.<locals>.wrapper.<locals>.handle_future_result(span_id='Workflow.run...-a902d214ff33', bound_args=<BoundArgumen...----------"})>, instance=<src.agent.AI...0015A93FB9050>, context=<_contextvars...0015B0C617B40>)(<WorkflowHand...bo-16k-0613")>) at c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py:273
+handle: <Handle Dispatcher.span.<locals>.wrapper.<locals>.handle_future_result(span_id='Workflow.run...-a902d214ff33', bound_args=<BoundArgumen...----------"})>, instance=<src.agent.AI...0015A93FB9050>, context=<_contextvars...0015B0C617B40>)(<WorkflowHand...bo-16k-0613")>) at c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py:273>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\workflow\workflow.py", line 247, in _task
+    new_ev = await instrumented_step(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py", line 367, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\src\agent\AITA_Agent.py", line 116, in synthesize
+    response_synthesizer = get_response_synthesizer(
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\response_synthesizers\factory.py", line 63, in get_response_synthesizer
+    llm.metadata,
+    ^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\llms\openai\base.py", line 336, in metadata
+    context_window=openai_modelname_to_contextsize(self._get_model_name()),
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\llms\openai\utils.py", line 235, in openai_modelname_to_contextsize
+    raise ValueError(
+ValueError: Unknown model 'o1-mini-2024-07-18'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\mattb\AppData\Local\Programs\Python\Python311\Lib\asyncio\events.py", line 84, in _run
+    self._context.run(self._callback, *self._args)
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py", line 285, in handle_future_result
+    raise exception
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\workflow\workflow.py", line 440, in _run_workflow
+    raise exception_raised
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\workflow\workflow.py", line 254, in _task
+    raise WorkflowRuntimeError(
+llama_index.core.workflow.errors.WorkflowRuntimeError: Error in step 'synthesize': Unknown model 'o1-mini-2024-07-18'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+2025-01-03 11:01:53,653 - src.agent.evaluation.eval_util - WARNING - Error processing sample 6: Error in step 'synthesize': Unknown model 'o1-mini-2024-07-18'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+2025-01-03 11:01:53,657 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 11:01:53,658 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 11:01:53,658 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 11:01:54,101 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 11:01:55,542 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 11:01:55,886 - asyncio - ERROR - Exception in callback Dispatcher.span.<locals>.wrapper.<locals>.handle_future_result(span_id='Workflow.run...-080aa1101644', bound_args=<BoundArgumen...freak out."})>, instance=<src.agent.AI...0015A93FB9050>, context=<_contextvars...0015B0C63A680>)(<WorkflowHand...bo-16k-0613")>) at c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py:273
+handle: <Handle Dispatcher.span.<locals>.wrapper.<locals>.handle_future_result(span_id='Workflow.run...-080aa1101644', bound_args=<BoundArgumen...freak out."})>, instance=<src.agent.AI...0015A93FB9050>, context=<_contextvars...0015B0C63A680>)(<WorkflowHand...bo-16k-0613")>) at c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py:273>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\workflow\workflow.py", line 247, in _task
+    new_ev = await instrumented_step(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py", line 367, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\src\agent\AITA_Agent.py", line 116, in synthesize
+    response_synthesizer = get_response_synthesizer(
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\response_synthesizers\factory.py", line 63, in get_response_synthesizer
+    llm.metadata,
+    ^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\llms\openai\base.py", line 336, in metadata
+    context_window=openai_modelname_to_contextsize(self._get_model_name()),
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\llms\openai\utils.py", line 235, in openai_modelname_to_contextsize
+    raise ValueError(
+ValueError: Unknown model 'o1-mini-2024-07-18'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\mattb\AppData\Local\Programs\Python\Python311\Lib\asyncio\events.py", line 84, in _run
+    self._context.run(self._callback, *self._args)
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py", line 285, in handle_future_result
+    raise exception
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\workflow\workflow.py", line 440, in _run_workflow
+    raise exception_raised
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\workflow\workflow.py", line 254, in _task
+    raise WorkflowRuntimeError(
+llama_index.core.workflow.errors.WorkflowRuntimeError: Error in step 'synthesize': Unknown model 'o1-mini-2024-07-18'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+2025-01-03 11:01:55,890 - src.agent.evaluation.eval_util - WARNING - Error processing sample 7: Error in step 'synthesize': Unknown model 'o1-mini-2024-07-18'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+2025-01-03 11:01:55,893 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 11:01:55,894 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 11:01:55,894 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 11:01:56,358 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 11:01:57,630 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 11:01:57,988 - asyncio - ERROR - Exception in callback Dispatcher.span.<locals>.wrapper.<locals>.handle_future_result(span_id='Workflow.run...-55789de28205', bound_args=<BoundArgumen...judgement.'})>, instance=<src.agent.AI...0015A93FB9050>, context=<_contextvars...0015B0C52E8C0>)(<WorkflowHand...bo-16k-0613")>) at c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py:273
+handle: <Handle Dispatcher.span.<locals>.wrapper.<locals>.handle_future_result(span_id='Workflow.run...-55789de28205', bound_args=<BoundArgumen...judgement.'})>, instance=<src.agent.AI...0015A93FB9050>, context=<_contextvars...0015B0C52E8C0>)(<WorkflowHand...bo-16k-0613")>) at c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py:273>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\workflow\workflow.py", line 247, in _task
+    new_ev = await instrumented_step(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py", line 367, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\src\agent\AITA_Agent.py", line 116, in synthesize
+    response_synthesizer = get_response_synthesizer(
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\response_synthesizers\factory.py", line 63, in get_response_synthesizer
+    llm.metadata,
+    ^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\llms\openai\base.py", line 336, in metadata
+    context_window=openai_modelname_to_contextsize(self._get_model_name()),
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\llms\openai\utils.py", line 235, in openai_modelname_to_contextsize
+    raise ValueError(
+ValueError: Unknown model 'o1-mini-2024-07-18'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\mattb\AppData\Local\Programs\Python\Python311\Lib\asyncio\events.py", line 84, in _run
+    self._context.run(self._callback, *self._args)
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py", line 285, in handle_future_result
+    raise exception
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\workflow\workflow.py", line 440, in _run_workflow
+    raise exception_raised
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\workflow\workflow.py", line 254, in _task
+    raise WorkflowRuntimeError(
+llama_index.core.workflow.errors.WorkflowRuntimeError: Error in step 'synthesize': Unknown model 'o1-mini-2024-07-18'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+2025-01-03 11:01:57,992 - src.agent.evaluation.eval_util - WARNING - Error processing sample 8: Error in step 'synthesize': Unknown model 'o1-mini-2024-07-18'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+2025-01-03 11:01:57,996 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 11:01:57,996 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 11:01:57,997 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 11:01:58,403 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 11:01:59,601 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 11:01:59,929 - asyncio - ERROR - Exception in callback Dispatcher.span.<locals>.wrapper.<locals>.handle_future_result(span_id='Workflow.run...-24d47b9c7681', bound_args=<BoundArgumen... together?'})>, instance=<src.agent.AI...0015A93FB9050>, context=<_contextvars...0015B098791C0>)(<WorkflowHand...bo-16k-0613")>) at c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py:273
+handle: <Handle Dispatcher.span.<locals>.wrapper.<locals>.handle_future_result(span_id='Workflow.run...-24d47b9c7681', bound_args=<BoundArgumen... together?'})>, instance=<src.agent.AI...0015A93FB9050>, context=<_contextvars...0015B098791C0>)(<WorkflowHand...bo-16k-0613")>) at c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py:273>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\workflow\workflow.py", line 247, in _task
+    new_ev = await instrumented_step(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py", line 367, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\src\agent\AITA_Agent.py", line 116, in synthesize
+    response_synthesizer = get_response_synthesizer(
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\response_synthesizers\factory.py", line 63, in get_response_synthesizer
+    llm.metadata,
+    ^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\llms\openai\base.py", line 336, in metadata
+    context_window=openai_modelname_to_contextsize(self._get_model_name()),
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\llms\openai\utils.py", line 235, in openai_modelname_to_contextsize
+    raise ValueError(
+ValueError: Unknown model 'o1-mini-2024-07-18'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\mattb\AppData\Local\Programs\Python\Python311\Lib\asyncio\events.py", line 84, in _run
+    self._context.run(self._callback, *self._args)
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\instrumentation\dispatcher.py", line 285, in handle_future_result
+    raise exception
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\workflow\workflow.py", line 440, in _run_workflow
+    raise exception_raised
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\llama_index\core\workflow\workflow.py", line 254, in _task
+    raise WorkflowRuntimeError(
+llama_index.core.workflow.errors.WorkflowRuntimeError: Error in step 'synthesize': Unknown model 'o1-mini-2024-07-18'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+2025-01-03 11:01:59,934 - src.agent.evaluation.eval_util - WARNING - Error processing sample 9: Error in step 'synthesize': Unknown model 'o1-mini-2024-07-18'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+2025-01-03 11:01:59,935 - src.agent.evaluation.eval_util - INFO - Response collection completed. Successful: 0, Failed: 10
+2025-01-03 11:01:59,939 - __main__ - INFO - Collected 0 responses
+2025-01-03 11:01:59,939 - __main__ - INFO - Starting evaluation of responses
+2025-01-03 11:01:59,940 - src.agent.evaluation.eval_util - INFO - Starting comprehensive evaluation
+2025-01-03 11:01:59,940 - src.agent.evaluation.eval_util - INFO - Evaluating classifications...
+2025-01-03 11:01:59,940 - src.agent.evaluation.eval_util - INFO - Starting classification evaluation
+2025-01-03 11:01:59,940 - src.agent.evaluation.eval_util - INFO - Generating classification report
+2025-01-03 11:01:59,952 - src.agent.evaluation.eval_util - INFO - Generating confusion matrix
+2025-01-03 11:02:00,014 - __main__ - INFO - Script execution completed
+2025-01-03 11:02:46,325 - __main__ - INFO - Starting AITA Agent evaluation script
+2025-01-03 11:02:46,328 - __main__ - INFO - Setting up telemetry
+2025-01-03 11:02:46,429 - __main__ - INFO - Telemetry setup completed successfully
+2025-01-03 11:02:46,430 - __main__ - INFO - Starting evaluation process
+2025-01-03 11:02:46,430 - __main__ - INFO - Initializing Evaluation Utility
+2025-01-03 11:02:46,430 - src.agent.evaluation.eval_util - INFO - Initialized Evaluation_Utility
+2025-01-03 11:02:46,431 - __main__ - INFO - Initializing AITA Agent workflow
+2025-01-03 11:02:46,431 - __main__ - INFO - Loading dataset from MattBoraske/reddit-AITA-submissions-and-comments-multiclass
+2025-01-03 11:02:48,221 - __main__ - INFO - Dataset size after filtering: 9867
+2025-01-03 11:02:48,222 - __main__ - INFO - Creating test set
+2025-01-03 11:02:48,222 - src.agent.evaluation.eval_util - INFO - Creating test set using weighted sampling strategy
+2025-01-03 11:02:48,238 - src.agent.evaluation.eval_util - INFO - Created weighted test set with 10 total samples
+2025-01-03 11:02:48,243 - src.agent.evaluation.eval_util - INFO - Successfully created test set with 10 samples
+2025-01-03 11:02:48,245 - __main__ - INFO - Final test set size: 10
+2025-01-03 11:02:48,245 - __main__ - INFO - Starting response collection
+2025-01-03 11:02:48,246 - src.agent.evaluation.eval_util - INFO - Starting response collection for 10 samples
+2025-01-03 11:02:48,255 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 11:02:48,257 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 11:02:48,283 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 11:02:49,873 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 11:02:53,255 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 11:02:54,784 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:02:59,493 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:03:02,553 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:03:08,226 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:03:10,180 - openinference.instrumentation.llama_index._handler - ERROR - Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\openinference\instrumentation\llama_index\_handler.py", line 253, in process_output
+    self[OUTPUT_VALUE] = result.model_dump_json(exclude_unset=True)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\pydantic\main.py", line 477, in model_dump_json
+    return self.__pydantic_serializer__.to_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.PydanticSerializationError: Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+2025-01-03 11:03:11,527 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:03:16,270 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 11:03:16,271 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 11:03:16,271 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 11:03:16,755 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 11:03:18,040 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 11:03:20,125 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:03:24,472 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:03:31,905 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:03:37,170 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:03:41,019 - openinference.instrumentation.llama_index._handler - ERROR - Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\openinference\instrumentation\llama_index\_handler.py", line 253, in process_output
+    self[OUTPUT_VALUE] = result.model_dump_json(exclude_unset=True)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\pydantic\main.py", line 477, in model_dump_json
+    return self.__pydantic_serializer__.to_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.PydanticSerializationError: Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+2025-01-03 11:03:42,114 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:03:43,635 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 11:03:43,636 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 11:03:43,636 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 11:03:44,243 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 11:03:45,599 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 11:03:47,087 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:03:52,778 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:03:56,480 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:04:04,273 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:04:06,399 - openinference.instrumentation.llama_index._handler - ERROR - Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\openinference\instrumentation\llama_index\_handler.py", line 253, in process_output
+    self[OUTPUT_VALUE] = result.model_dump_json(exclude_unset=True)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\pydantic\main.py", line 477, in model_dump_json
+    return self.__pydantic_serializer__.to_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.PydanticSerializationError: Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+2025-01-03 11:04:07,742 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:04:11,192 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 11:04:11,193 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 11:04:11,193 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 11:04:11,724 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 11:04:13,002 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 11:04:14,344 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:04:27,290 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:04:31,511 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:04:35,674 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:04:39,698 - openinference.instrumentation.llama_index._handler - ERROR - Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\openinference\instrumentation\llama_index\_handler.py", line 253, in process_output
+    self[OUTPUT_VALUE] = result.model_dump_json(exclude_unset=True)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\pydantic\main.py", line 477, in model_dump_json
+    return self.__pydantic_serializer__.to_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.PydanticSerializationError: Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+2025-01-03 11:04:41,002 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:04:42,783 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 11:04:42,785 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 11:04:42,785 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 11:04:43,251 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 11:04:44,551 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 11:04:46,226 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:04:49,153 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:04:51,867 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:04:54,409 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:04:56,581 - openinference.instrumentation.llama_index._handler - ERROR - Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\openinference\instrumentation\llama_index\_handler.py", line 253, in process_output
+    self[OUTPUT_VALUE] = result.model_dump_json(exclude_unset=True)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\pydantic\main.py", line 477, in model_dump_json
+    return self.__pydantic_serializer__.to_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.PydanticSerializationError: Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+2025-01-03 11:04:57,567 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:04:59,967 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 11:04:59,968 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 11:04:59,969 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 11:05:00,443 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 11:05:01,702 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 11:05:03,137 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:05:07,910 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:05:10,762 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:05:16,717 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:05:20,462 - openinference.instrumentation.llama_index._handler - ERROR - Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\openinference\instrumentation\llama_index\_handler.py", line 253, in process_output
+    self[OUTPUT_VALUE] = result.model_dump_json(exclude_unset=True)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\pydantic\main.py", line 477, in model_dump_json
+    return self.__pydantic_serializer__.to_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.PydanticSerializationError: Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+2025-01-03 11:05:21,512 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:05:24,223 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 11:05:24,225 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 11:05:24,225 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 11:05:24,700 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 11:05:26,085 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 11:05:27,726 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:05:33,394 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:05:38,098 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:05:40,807 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:05:45,112 - openinference.instrumentation.llama_index._handler - ERROR - Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\openinference\instrumentation\llama_index\_handler.py", line 253, in process_output
+    self[OUTPUT_VALUE] = result.model_dump_json(exclude_unset=True)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\pydantic\main.py", line 477, in model_dump_json
+    return self.__pydantic_serializer__.to_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.PydanticSerializationError: Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+2025-01-03 11:05:46,038 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:05:48,021 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 11:05:48,022 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 11:05:48,022 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 11:05:48,575 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 11:05:49,841 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 11:05:51,055 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:05:54,244 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:05:57,207 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:06:01,388 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:06:05,164 - openinference.instrumentation.llama_index._handler - ERROR - Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\openinference\instrumentation\llama_index\_handler.py", line 253, in process_output
+    self[OUTPUT_VALUE] = result.model_dump_json(exclude_unset=True)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\pydantic\main.py", line 477, in model_dump_json
+    return self.__pydantic_serializer__.to_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.PydanticSerializationError: Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+2025-01-03 11:06:06,577 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:06:11,030 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 11:06:11,031 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 11:06:11,031 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 11:06:11,459 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 11:06:12,710 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 11:06:14,378 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:06:18,634 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:06:22,304 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:06:24,642 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:06:27,431 - openinference.instrumentation.llama_index._handler - ERROR - Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\openinference\instrumentation\llama_index\_handler.py", line 253, in process_output
+    self[OUTPUT_VALUE] = result.model_dump_json(exclude_unset=True)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\pydantic\main.py", line 477, in model_dump_json
+    return self.__pydantic_serializer__.to_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.PydanticSerializationError: Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+2025-01-03 11:06:28,736 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:06:32,251 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 11:06:32,252 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 11:06:32,253 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 11:06:32,935 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 11:06:34,397 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 11:06:35,966 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:06:41,176 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:06:44,678 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:06:48,966 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:06:53,007 - openinference.instrumentation.llama_index._handler - ERROR - Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\openinference\instrumentation\llama_index\_handler.py", line 253, in process_output
+    self[OUTPUT_VALUE] = result.model_dump_json(exclude_unset=True)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\pydantic\main.py", line 477, in model_dump_json
+    return self.__pydantic_serializer__.to_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.PydanticSerializationError: Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+2025-01-03 11:06:54,254 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 11:06:59,086 - src.agent.evaluation.eval_util - INFO - Response collection completed. Successful: 10, Failed: 0
+2025-01-03 11:06:59,091 - __main__ - INFO - Collected 10 responses
+2025-01-03 11:06:59,091 - __main__ - INFO - Starting evaluation of responses
+2025-01-03 11:06:59,092 - src.agent.evaluation.eval_util - INFO - Starting comprehensive evaluation
+2025-01-03 11:06:59,092 - src.agent.evaluation.eval_util - INFO - Evaluating classifications...
+2025-01-03 11:06:59,092 - src.agent.evaluation.eval_util - INFO - Starting classification evaluation
+2025-01-03 11:06:59,093 - src.agent.evaluation.eval_util - INFO - Generating classification report
+2025-01-03 11:06:59,106 - src.agent.evaluation.eval_util - INFO - Generating confusion matrix
+2025-01-03 11:06:59,713 - src.agent.evaluation.eval_util - INFO - Calculating Matthews Correlation Coefficient
+2025-01-03 11:07:00,404 - src.agent.evaluation.eval_util - INFO - Classification evaluation completed successfully
+2025-01-03 11:07:00,404 - src.agent.evaluation.eval_util - INFO - Evaluating justifications...
+2025-01-03 11:07:00,404 - src.agent.evaluation.eval_util - INFO - Starting justification evaluation
+2025-01-03 11:07:00,405 - src.agent.evaluation.eval_util - INFO - Calculating ROUGE scores
+2025-01-03 11:07:00,770 - absl - INFO - Using default tokenizer.
+2025-01-03 11:07:00,960 - src.agent.evaluation.eval_util - INFO - Calculating BLEU scores
+2025-01-03 11:07:01,649 - src.agent.evaluation.eval_util - INFO - Calculating COMET scores
+2025-01-03 11:07:03,866 - pytorch_lightning.utilities.migration.utils - INFO - Lightning automatically upgraded your loaded checkpoint from v1.8.3.post1 to v2.5.0.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\mattb\.cache\huggingface\hub\models--Unbabel--wmt22-comet-da\snapshots\371e9839ca4e213dde891b066cf3080f75ec7e72\checkpoints\model.ckpt`
+2025-01-03 11:07:09,843 - comet.models.base - INFO - Encoder model frozen.
+2025-01-03 11:07:10,292 - pytorch_lightning.utilities.rank_zero - INFO - GPU available: True (cuda), used: True
+2025-01-03 11:07:10,293 - pytorch_lightning.utilities.rank_zero - INFO - TPU available: False, using: 0 TPU cores
+2025-01-03 11:07:10,293 - pytorch_lightning.utilities.rank_zero - INFO - HPU available: False, using: 0 HPUs
+2025-01-03 11:07:10,297 - pytorch_lightning.utilities.rank_zero - INFO - You are using a CUDA device ('NVIDIA GeForce RTX 3070') that has Tensor Cores. To properly utilize them, you should set `torch.set_float32_matmul_precision('medium' | 'high')` which will trade-off precision for performance. For more details, read https://pytorch.org/docs/stable/generated/torch.set_float32_matmul_precision.html#torch.set_float32_matmul_precision
+2025-01-03 11:07:10,302 - pytorch_lightning.accelerators.cuda - INFO - LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+2025-01-03 11:07:12,358 - src.agent.evaluation.eval_util - INFO - Starting toxicity analysis
+2025-01-03 11:07:14,528 - src.agent.evaluation.eval_util - INFO - Calculating toxicity statistics
+2025-01-03 11:07:14,530 - src.agent.evaluation.eval_util - INFO - Generating toxicity visualization
+2025-01-03 11:07:14,530 - src.agent.evaluation.eval_util - INFO - Generating toxicity score visualization
+2025-01-03 11:07:15,365 - src.agent.evaluation.eval_util - INFO - Toxicity plot saved to eval_results\aita-text-embedding-3-small-v2-o1-mini-2024-07-18-weighted-10\toxicity_plot.png
+2025-01-03 11:07:15,366 - src.agent.evaluation.eval_util - INFO - Justification evaluation completed successfully
+2025-01-03 11:07:15,373 - src.agent.evaluation.eval_util - INFO - Evaluating retrieval...
+2025-01-03 11:07:15,374 - src.agent.evaluation.eval_util - INFO - Starting retrieval evaluation
+2025-01-03 11:07:15,374 - src.agent.evaluation.eval_util - INFO - Calculating retrieval summary metrics
+2025-01-03 11:07:15,376 - src.agent.evaluation.eval_util - INFO - Retrieval evaluation completed successfully
+2025-01-03 11:07:15,376 - src.agent.evaluation.eval_util - INFO - Top document classification accuracy: 100.00%
+2025-01-03 11:07:15,377 - src.agent.evaluation.eval_util - INFO - Average document classification accuracy: 90.00%
+2025-01-03 11:07:15,377 - src.agent.evaluation.eval_util - INFO - Comprehensive evaluation completed successfully
+2025-01-03 11:07:15,377 - __main__ - INFO - Saving responses to eval_results\aita-text-embedding-3-small-v2-o1-mini-2024-07-18-weighted-10\responses.json
+2025-01-03 11:07:15,382 - __main__ - INFO - Evaluation process completed successfully
+2025-01-03 11:07:15,404 - __main__ - INFO - Script execution completed

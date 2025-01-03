@@ -8,9 +8,9 @@
             "module": "src.vector-store.vs_creation",
             "args": [
                 "--dataset", "MattBoraske/reddit-AITA-submissions-and-comments-multiclass",
-                "--index-name", "aita-text-embedding-3-small-v2",
+                "--index-name", "aita-text-embedding-3-large-v2",
                 "--embed-provider", "openai",
-                "--embed-endpoint", "text-embedding-3-small",
+                "--embed-endpoint", "text-embedding-3-large",
                 //"--keep-info"
             ],
             "justMyCode": true
@@ -24,15 +24,15 @@
                 "--log-level", "INFO",
                 "--timeout", "300",
                 "--llm-provider", "openai",
-                "--llm-endpoint", "gpt-4o-mini-2024-07-18",               
+                "--llm-endpoint", "o1-mini-2024-09-12",               
                 "--embedding-model", "text-embedding-3-small",
                 "--pinecone-index", "aita-text-embedding-3-small-v2",
                 "--docs-to-retrieve", "5",
                 "--dataset", "MattBoraske/reddit-AITA-submissions-and-comments-multiclass",
                 "--sampling", "weighted", // can also be complete or balanced
                 "--balanced-samples-per-class", "1", // only used when sampling is balanced
-                "--weighted-total-samples", "1000", // only used when sampling is weighted
-                "--results-directory", "aita-text-embedding-3-small-v2-gpt-4o-mini-2024-07-18-weighted-1000",
+                "--weighted-total-samples", "10", // only used when sampling is weighted
+                "--results-directory", "aita-text-embedding-3-small-v2-o1-mini-2024-07-18-weighted-10",
             ],
             "justMyCode": true
         },
@@ -41,5 +41,6 @@
 
 // MODELS ENDPOINTS
 // OPENAI
-    // GPT-4o : gpt-4o-2024-08-06
-    // GPT-4o-mini: gpt-4o-mini-2024-07-18
+    // 4o : gpt-4o-2024-08-06
+    // 4o-mini: gpt-4o-mini-2024-07-18
+    // o1-mini: o1-mini-2024-09-12
