@@ -8,9 +8,9 @@
             "module": "src.vector-store.vs_creation",
             "args": [
                 "--dataset", "MattBoraske/reddit-AITA-submissions-and-comments-multiclass",
-                "--index-name", "aita-text-embedding-3-large",
+                "--index-name", "aita-text-embedding-3-small",
                 "--embed-provider", "openai",
-                "--embed-endpoint", "text-embedding-3-large",
+                "--embed-endpoint", "text-embedding-3-small",
                 //"--keep-info"
             ],
             "justMyCode": true
@@ -21,12 +21,17 @@
             "request": "launch",
             "module": "src.agent.evaluation.agent_eval",
             "args": [
+                "--log-level", "INFO",
+                "--timeout", "300",
+                "--llm-provider", "openai",
+                "--llm-endpoint", "gpt-4o-2024-08-06",               
                 "--embedding-model", "text-embedding-3-large",
                 "--pinecone-index", "aita-text-embedding-3-large",
                 "--docs-to-retrieve", "5",
                 "--dataset", "MattBoraske/reddit-AITA-submissions-and-comments-multiclass",
-                "--samples-per-class", "25",
-                "--results-directory", "eval_results",
+                //"--complete-dataset" // Use the complete dataset
+                "--samples-per-class", "250", // Use a balanced subset of the dataset
+                "--results-directory", "eval_results_embedding_3_large_4o_2024_08_06_balanced_250",
             ],
             "justMyCode": true
         },

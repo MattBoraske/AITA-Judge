@@ -45,6 +45,10 @@ def parse_args():
     # Workflow parameters
     parser.add_argument('--timeout', type=int, default=900,
                       help='Timeout in seconds (default: 900)')
+    parser.add_argument('--llm-provider', type=str, default='openai',
+                        help='LLM provider (default: openai)')
+    parser.add_argument('--llm-endpoint', type=str, default='text-davinci-003',
+                        help='LLM endpoint')
     parser.add_argument('--embedding-model', type=str, default='text-embedding-3-large',
                       help='Embedding model endpoint')
     parser.add_argument('--pinecone-index', type=str, default='aita-text-embedding-3-large',
@@ -100,6 +104,8 @@ def run_evaluation(args, logger):
         logger.info("Initializing AITA Agent workflow")
         workflow = AITA_Agent(
             timeout=args.timeout,
+            llm_provider=args.llm_provider,
+            llm_endpoint=args.llm_endpoint,
             embedding_model_endpoint=args.embedding_model,
             pinecone_vector_index=args.pinecone_index,
             docs_to_retrieve=args.docs_to_retrieve,
