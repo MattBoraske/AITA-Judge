@@ -24,15 +24,81 @@ class Evaluation_Utility():
         self.AITA_classifications = ['NTA', 'YTA', 'NAH', 'ESH']
         self.logger.info("Initialized Evaluation_Utility")
 
-    def create_test_set(self, df: pd.DataFrame) -> list[dict]:
-        """Create a test set from a DataFrame."""
-        self.logger.info(f"Creating test set from DataFrame with {len(df)} rows")
+    def create_test_set(
+        self, 
+        df: pd.DataFrame, 
+        sampling: str = 'full', 
+        balanced_samples_per_class: int = None,
+        weighted_total_samples: int = None
+    ) -> list[dict]:
+        """
+        Create a test set from a DataFrame containing test data with options for different sampling strategies.
+        
+        Args:
+            df (pd.DataFrame): DataFrame containing the test dataset
+            sampling (str): Sampling strategy to use:
+                - 'full': Use entire dataset (default)
+                - 'balanced': Equal samples per class
+                - 'weighted': Maintain class proportions with reduced size
+            samples_per_class (int, optional): Number of samples per class when sampling='balanced'
+            total_samples (int, optional): Total number of samples when sampling='weighted'
+            
+        Returns:
+            list[dict]: Test set containing query, top comment, and classification
+        """
+        self.logger.info(f"Creating test set using {sampling} sampling strategy")
         
         try:
+            if sampling == 'balanced':
+                if balanced_samples_per_class is None:
+                    balanced_samples_per_class = 10
+                self.logger.info(f"Creating balanced test set with {balanced_samples_per_class} samples per class")
+                df = (df.groupby('top_comment_1_classification')
+                    .apply(lambda x: x.sample(n=min(len(x), balanced_samples_per_class)))
+                    .reset_index(drop=True))
+                self.logger.debug(f"Class distribution in balanced set: {df['top_comment_1_classification'].value_counts()}")
+                
+            elif sampling == 'weighted':
+                if weighted_total_samples is None:
+                    raise ValueError("total_samples must be specified when using weighted sampling")
+                if weighted_total_samples > len(df):
+                    raise ValueError("total_samples cannot be larger than the input dataset")
+                    
+                # Calculate class proportions
+                class_proportions = df['top_comment_1_classification'].value_counts(normalize=True)
+                
+                # Calculate samples per class while maintaining proportions
+                class_samples = (class_proportions * weighted_total_samples).round().astype(int)
+                
+                # Adjust for rounding errors to match total_samples exactly
+                diff = weighted_total_samples - class_samples.sum()
+                if diff != 0:
+                    # Add/subtract the difference from the largest class
+                    largest_class = class_samples.index[0]
+                    class_samples[largest_class] += diff
+                
+                # Sample from each class according to calculated proportions
+                sampled_df = pd.DataFrame()
+                for class_label, n_samples in class_samples.items():
+                    class_df = df[df['top_comment_1_classification'] == class_label]
+                    sampled_df = pd.concat([
+                        sampled_df,
+                        class_df.sample(n=min(len(class_df), n_samples))
+                    ])
+                
+                df = sampled_df.reset_index(drop=True)
+                
+                self.logger.info(f"Created weighted test set with {len(df)} total samples")
+                self.logger.debug(f"Class distribution in weighted set: {df['top_comment_1_classification'].value_counts()}")
+                self.logger.debug(f"Class proportions in weighted set: {df['top_comment_1_classification'].value_counts(normalize=True)}")
+                
+            else:  # 'full' sampling
+                self.logger.info(f"Creating full test set from DataFrame with {len(df)} rows")
+
             test_set = []
-            for index, row in df.iterrows():
+            for _, row in df.iterrows():
                 test_set.append({
-                    'query': row['submission_text'] + '\n\n' + row['submission_title'], 
+                    'query': row['submission_title'] + '\n\n' + row['submission_text'],
                     'top_comment': row['top_comment_1'],
                     'top_comment_classification': row['top_comment_1_classification']
                 })
@@ -42,32 +108,6 @@ class Evaluation_Utility():
             
         except Exception as e:
             self.logger.error(f"Error creating test set: {str(e)}", exc_info=True)
-            raise
-
-    def create_balanced_test_set(self, df: pd.DataFrame, samples_per_class: int = 10) -> list[dict]:
-        """Create a balanced test set with equal representation from each classification."""
-        self.logger.info(f"Creating balanced test set with {samples_per_class} samples per class")
-        
-        try:
-            balanced_df = (df.groupby('top_comment_1_classification')
-                            .apply(lambda x: x.sample(n=min(len(x), samples_per_class)))
-                            .reset_index(drop=True))
-            
-            self.logger.debug(f"Class distribution in balanced set: {balanced_df['top_comment_1_classification'].value_counts()}")
-            
-            test_set = []
-            for _, row in balanced_df.iterrows():
-               test_set.append({
-                    'query': row['submission_text'] + '\n\n' + row['submission_title'], 
-                    'top_comment': row['top_comment_1'],
-                    'top_comment_classification': row['top_comment_1_classification']
-                })
-            
-            self.logger.info(f"Successfully created balanced test set with {len(test_set)} samples")
-            return test_set
-            
-        except Exception as e:
-            self.logger.error(f"Error creating balanced test set: {str(e)}", exc_info=True)
             raise
 
     async def collect_responses(self, workflow: Workflow, test_set: list[tuple]):
@@ -83,7 +123,11 @@ class Evaluation_Utility():
 
                 retrieved_doc_contents = []
                 for node in result.source_nodes:
-                    retrieved_doc_contents.append(node.text)
+                    retrieved_doc_contents.append({
+                        'text': node.text,
+                        'classification': node.metadata['Correct Classification'],
+                        'justification': node.metadata['Correct Justification']
+                    })
                 
                 response = ""
                 async for chunk in result.async_response_gen():
@@ -287,6 +331,14 @@ class Evaluation_Utility():
             with open(bleu_path, 'w') as f:
                 json.dump(bleu, f)
             self.logger.debug(f"BLEU scores saved to {bleu_path}")
+
+            # Calculate COMET scores
+            self.logger.info("Calculating COMET scores")
+            comet_metric = evaluate.load('comet')
+            comet_score = comet_metric.compute(predictions=predictions, references=references, sources=sources)
+            comet_path = os.path.join(results_directory, comet_filepath)
+            with open(comet_path, 'w') as f:
+                json.dump(comet_score, f)
 
             # Toxicity analysis
             self.logger.info("Starting toxicity analysis")
@@ -528,10 +580,7 @@ class Evaluation_Utility():
                     
                 # Get true classification and document classifications
                 true_classification = response['top_comment_classification']
-                doc_classifications = [
-                    self.parse_AITA_classification(doc, parse_type='doc')
-                    for doc in response['retrieved_docs']
-                ]
+                doc_classifications = [doc['classification'] for doc in response['retrieved_docs']]
                 
                 # Get top retrieved doc classification
                 top_doc_classification = doc_classifications[0]

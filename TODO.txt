@@ -2,9 +2,14 @@
 TO DO
 -----
 
-1. toxicity eval for justifications
-    - store toxicity classifications prior to plotting
-    - finish and add in toxicity plotting
+1. add directory where logs are stored for vs_creation requirements
+
+2. fix requirements.txt
+    - add specific library versions
+    - issue seems to be using the comet model with current installed library versions
+        - could also be an issue with running comet on mac...
+
+3. update readme
 
 2. add code for dataset collection/creation (helps validate legitimacy of HF dataset)
     - collection = making initial data files using reddit API
@@ -14,10 +19,3 @@ TO DO
 3. consider what an a complete end to end experiment pipeline would look like
     - not sure if its worth it though... would be if we had a constant source of new data to index
         - maybe it would be though to run experiments on vector stores containing different 1) data subsets or 2) embeddings
-
-4. add code for dataset collection/creation (helps validate legitimacy of HF dataset)
-    - collection = making initial data files using reddit API
-    - creation = refinements done to create HF dataset used to train model
-    - store initial data file on S3 and include links to download them in the README
-
-5. fix requirements.txt

@@ -1,4 +1,2 @@
 .env
 **/__pycache__/
-eval_results/
-eval_results_embedding_3_large_4o_2024_08_06_balanced_250/agent_eval.log

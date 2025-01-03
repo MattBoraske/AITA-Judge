@@ -1,0 +1,244 @@
+2025-01-03 02:09:48,987 - __main__ - INFO - Starting AITA Agent evaluation script
+2025-01-03 02:09:48,990 - __main__ - INFO - Setting up telemetry
+2025-01-03 02:09:49,085 - __main__ - INFO - Telemetry setup completed successfully
+2025-01-03 02:09:49,086 - __main__ - INFO - Starting evaluation process
+2025-01-03 02:09:49,086 - __main__ - INFO - Initializing Evaluation Utility
+2025-01-03 02:09:49,086 - src.agent.evaluation.eval_util - INFO - Initialized Evaluation_Utility
+2025-01-03 02:09:49,087 - __main__ - INFO - Initializing AITA Agent workflow
+2025-01-03 02:09:49,087 - __main__ - INFO - Loading dataset from MattBoraske/reddit-AITA-submissions-and-comments-multiclass
+2025-01-03 02:09:50,566 - __main__ - INFO - Dataset size after filtering: 9867
+2025-01-03 02:09:50,566 - __main__ - INFO - Creating test set
+2025-01-03 02:09:50,566 - src.agent.evaluation.eval_util - INFO - Creating test set using weighted sampling strategy
+2025-01-03 02:09:50,585 - src.agent.evaluation.eval_util - INFO - Created weighted test set with 1000 total samples
+2025-01-03 02:09:50,674 - src.agent.evaluation.eval_util - INFO - Successfully created test set with 1000 samples
+2025-01-03 02:09:50,675 - __main__ - INFO - Final test set size: 1000
+2025-01-03 02:09:50,675 - __main__ - INFO - Starting response collection
+2025-01-03 02:09:50,676 - src.agent.evaluation.eval_util - INFO - Starting response collection for 1000 samples
+2025-01-03 02:09:50,686 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 02:09:50,687 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 02:09:50,714 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 02:09:52,247 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 02:09:54,909 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 02:09:55,727 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:09:58,090 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:10:00,754 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:10:04,429 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:10:06,364 - openinference.instrumentation.llama_index._handler - ERROR - Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\openinference\instrumentation\llama_index\_handler.py", line 253, in process_output
+    self[OUTPUT_VALUE] = result.model_dump_json(exclude_unset=True)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\pydantic\main.py", line 477, in model_dump_json
+    return self.__pydantic_serializer__.to_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.PydanticSerializationError: Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+2025-01-03 02:10:07,184 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:10:10,565 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 02:10:10,566 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 02:10:10,567 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 02:10:11,025 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 02:10:15,085 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 02:10:15,940 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:10:20,628 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:10:22,600 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:10:25,488 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:10:27,763 - openinference.instrumentation.llama_index._handler - ERROR - Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\openinference\instrumentation\llama_index\_handler.py", line 253, in process_output
+    self[OUTPUT_VALUE] = result.model_dump_json(exclude_unset=True)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\pydantic\main.py", line 477, in model_dump_json
+    return self.__pydantic_serializer__.to_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.PydanticSerializationError: Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+2025-01-03 02:10:28,569 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:10:32,089 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 02:10:32,090 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 02:10:32,090 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 02:10:32,536 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 02:10:33,937 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 02:10:34,973 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:10:37,955 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:10:41,410 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:10:44,527 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:10:49,185 - openinference.instrumentation.llama_index._handler - ERROR - Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\openinference\instrumentation\llama_index\_handler.py", line 253, in process_output
+    self[OUTPUT_VALUE] = result.model_dump_json(exclude_unset=True)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\pydantic\main.py", line 477, in model_dump_json
+    return self.__pydantic_serializer__.to_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.PydanticSerializationError: Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+2025-01-03 02:10:50,179 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:10:54,369 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 02:10:54,370 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 02:10:54,371 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 02:10:54,938 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 02:10:56,272 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 02:10:57,234 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:10:59,809 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:11:02,446 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:11:06,568 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:11:08,466 - openinference.instrumentation.llama_index._handler - ERROR - Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\openinference\instrumentation\llama_index\_handler.py", line 253, in process_output
+    self[OUTPUT_VALUE] = result.model_dump_json(exclude_unset=True)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\pydantic\main.py", line 477, in model_dump_json
+    return self.__pydantic_serializer__.to_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.PydanticSerializationError: Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+2025-01-03 02:11:09,165 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:11:11,888 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 02:11:11,889 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 02:11:11,890 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 02:11:12,419 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 02:11:13,834 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 02:11:14,756 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:11:18,006 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:11:20,854 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:11:24,326 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:11:28,681 - openinference.instrumentation.llama_index._handler - ERROR - Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\openinference\instrumentation\llama_index\_handler.py", line 253, in process_output
+    self[OUTPUT_VALUE] = result.model_dump_json(exclude_unset=True)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\pydantic\main.py", line 477, in model_dump_json
+    return self.__pydantic_serializer__.to_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.PydanticSerializationError: Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+2025-01-03 02:11:29,203 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:11:34,067 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 02:11:34,068 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 02:11:34,068 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 02:11:34,509 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 02:11:35,850 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 02:11:36,742 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:11:40,723 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:11:43,302 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:11:45,501 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:11:47,463 - openinference.instrumentation.llama_index._handler - ERROR - Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\openinference\instrumentation\llama_index\_handler.py", line 253, in process_output
+    self[OUTPUT_VALUE] = result.model_dump_json(exclude_unset=True)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\pydantic\main.py", line 477, in model_dump_json
+    return self.__pydantic_serializer__.to_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.PydanticSerializationError: Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+2025-01-03 02:11:48,077 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:11:51,767 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 02:11:51,768 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 02:11:51,768 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 02:11:52,664 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 02:11:55,099 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 02:11:57,755 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:12:00,389 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:12:04,465 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:12:09,751 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:12:14,075 - openinference.instrumentation.llama_index._handler - ERROR - Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\openinference\instrumentation\llama_index\_handler.py", line 253, in process_output
+    self[OUTPUT_VALUE] = result.model_dump_json(exclude_unset=True)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\pydantic\main.py", line 477, in model_dump_json
+    return self.__pydantic_serializer__.to_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.PydanticSerializationError: Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+2025-01-03 02:12:14,633 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:12:18,812 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 02:12:18,813 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 02:12:18,813 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 02:12:19,419 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 02:12:20,717 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 02:12:21,552 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:12:26,633 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:12:31,211 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:12:36,267 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:12:39,066 - openinference.instrumentation.llama_index._handler - ERROR - Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\openinference\instrumentation\llama_index\_handler.py", line 253, in process_output
+    self[OUTPUT_VALUE] = result.model_dump_json(exclude_unset=True)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\pydantic\main.py", line 477, in model_dump_json
+    return self.__pydantic_serializer__.to_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.PydanticSerializationError: Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+2025-01-03 02:12:41,106 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:12:46,204 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 02:12:46,204 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 02:12:46,205 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 02:12:46,626 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 02:12:47,965 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 02:12:48,868 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:12:52,594 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:12:57,263 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:13:00,477 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:13:05,967 - openinference.instrumentation.llama_index._handler - ERROR - Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\openinference\instrumentation\llama_index\_handler.py", line 253, in process_output
+    self[OUTPUT_VALUE] = result.model_dump_json(exclude_unset=True)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\pydantic\main.py", line 477, in model_dump_json
+    return self.__pydantic_serializer__.to_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.PydanticSerializationError: Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+2025-01-03 02:13:06,766 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:13:10,568 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 02:13:10,569 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 02:13:10,570 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 02:13:11,059 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 02:13:15,063 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 02:13:15,957 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:13:19,627 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:13:26,391 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:13:32,228 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:13:35,692 - openinference.instrumentation.llama_index._handler - ERROR - Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\openinference\instrumentation\llama_index\_handler.py", line 253, in process_output
+    self[OUTPUT_VALUE] = result.model_dump_json(exclude_unset=True)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\pydantic\main.py", line 477, in model_dump_json
+    return self.__pydantic_serializer__.to_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.PydanticSerializationError: Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+2025-01-03 02:13:37,451 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:13:41,167 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 02:13:41,168 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 02:13:41,168 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 02:13:41,639 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 02:13:45,432 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 02:13:46,430 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:13:49,496 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:13:51,505 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:13:53,548 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:13:56,364 - openinference.instrumentation.llama_index._handler - ERROR - Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\openinference\instrumentation\llama_index\_handler.py", line 253, in process_output
+    self[OUTPUT_VALUE] = result.model_dump_json(exclude_unset=True)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\pydantic\main.py", line 477, in model_dump_json
+    return self.__pydantic_serializer__.to_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.PydanticSerializationError: Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+2025-01-03 02:13:57,000 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:13:58,469 - pinecone_plugin_interface.logging - INFO - Discovering subpackages in _NamespacePath(['c:\\Users\\mattb\\Documents\\GitHub\\AITA-Judge-Agent\\.venv\\Lib\\site-packages\\pinecone_plugins'])
+2025-01-03 02:13:58,470 - pinecone_plugin_interface.logging - INFO - Looking for plugins in pinecone_plugins.inference
+2025-01-03 02:13:58,471 - pinecone_plugin_interface.logging - INFO - Installing plugin inference into Pinecone
+2025-01-03 02:13:58,941 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-01-03 02:14:01,566 - httpx - INFO - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2025-01-03 02:14:02,444 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:14:05,363 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:14:09,072 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:14:13,382 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 02:14:15,964 - openinference.instrumentation.llama_index._handler - ERROR - Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+Traceback (most recent call last):
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\openinference\instrumentation\llama_index\_handler.py", line 253, in process_output
+    self[OUTPUT_VALUE] = result.model_dump_json(exclude_unset=True)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\pydantic\main.py", line 477, in model_dump_json
+    return self.__pydantic_serializer__.to_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.PydanticSerializationError: Error serializing to JSON: PydanticSerializationError: Unable to serialize unknown type: <class 'async_generator'>
+2025-01-03 02:14:16,754 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"

@@ -149,10 +149,10 @@ class VectorStoreUtility:
             Formatted document text
         """
         return (
-            f"Title: {row['submission_title']}\n\n"
-            f"Content: {row['submission_text']}\n\n"
-            f"Correct Classification: {row['top_comment_1_classification']}\n\n"
-            f"Correct Justification: {row['top_comment_1']}"
+            f"{row['submission_title']}\n\n"
+            f"{row['submission_text']}\n\n"
+            #f"Correct Classification: {row['top_comment_1_classification']}\n\n"
+            #f"Correct Justification: {row['top_comment_1']}"
         )
 
     def _create_document_metadata(self, row: pd.Series) -> Dict[str, Any]:
@@ -166,7 +166,9 @@ class VectorStoreUtility:
             Document metadata dictionary
         """
         return {
-            'Submission URL': row['submission_url']
+            'Submission URL': row['submission_url'],
+            'Correct Classification': row['top_comment_1_classification'],
+            'Correct Justification': row['top_comment_1'],
             # Add additional metadata fields as needed
         }
 

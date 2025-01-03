@@ -16,11 +16,10 @@ from opentelemetry.exporter.otlp.proto.http.trace_exporter import (
 from openinference.instrumentation.llama_index import LlamaIndexInstrumentor
 from multiprocessing import freeze_support
 
-def setup_logging(log_level=logging.INFO, results_directory='eval_results'):
+def setup_logging(results_directory, log_level=logging.INFO):
     """Set up logging configuration"""
 
-    # create log directory
-    os.makedirs(results_directory, exist_ok=True)
+    # create log file
     log_filename = os.path.join(results_directory, f'agent_eval.log')
     
     logging.basicConfig(
@@ -60,12 +59,16 @@ def parse_args():
     parser.add_argument('--dataset', type=str, 
                       default='MattBoraske/reddit-AITA-submissions-and-comments-multiclass',
                       help='HuggingFace dataset path')
-    parser.add_argument('--complete-dataset', action='store_true', default=False)
-    parser.add_argument('--samples-per-class', type=int, default=1,
-                      help='Number of samples per class')
+    parser.add_argument('--sampling', type=str, default='complete',
+                        choices=['complete, balanced', 'weighted'],
+                        help='Dataset sampling strategy')
+    parser.add_argument('--balanced-samples-per-class', type=int, default=1,
+                      help='Number of samples per class for balanced sampling')
+    parser.add_argument('--weighted-total-samples', type=int, default=12,
+                        help='Total number of samples to use for weighted sampling')
     
     # Output file parameters
-    parser.add_argument('--results-directory', type=str, default='eval_results')
+    parser.add_argument('--results-directory', type=str, default='agent_eval')
     parser.add_argument('--responses-file', type=str, default='responses.json')
     parser.add_argument('--classification-report-filepath', type=str, 
                       default='classification_report.txt')
@@ -86,7 +89,7 @@ def parse_args():
     
     return parser.parse_args()
 
-def run_evaluation(args, logger):
+def run_evaluation(args, logger, results_directory):
     """Run the evaluation process with logging"""
     logger.info("Starting evaluation process")
     logger.debug(f"Evaluation parameters: {vars(args)}")
@@ -95,10 +98,6 @@ def run_evaluation(args, logger):
         # Initialize evaluation utility
         logger.info("Initializing Evaluation Utility")
         eval_util = Evaluation_Utility()
-
-        # Create results directory
-        logger.debug(f"Creating results directory: {args.results_directory}")
-        os.makedirs(args.results_directory, exist_ok=True)
 
         # Initialize workflow
         logger.info("Initializing AITA Agent workflow")
@@ -121,15 +120,13 @@ def run_evaluation(args, logger):
         logger.info(f"Dataset size after filtering: {len(AITA_test_df)}")
         
         # Create test set
-        if not args.complete_dataset:
-            logger.info(f"Creating balanced test set with {args.samples_per_class} samples per class")
-            test_set = eval_util.create_balanced_test_set(
-                AITA_test_df, 
-                samples_per_class=args.samples_per_class
-            )
-        else:
-            logger.info("Using complete dataset for testing")
-            test_set = eval_util.create_test_set(AITA_test_df)
+        logger.info("Creating test set")
+        test_set = eval_util.create_test_set(
+            df=AITA_test_df,
+            sampling=args.sampling,
+            balanced_samples_per_class=args.balanced_samples_per_class,
+            weighted_total_samples=args.weighted_total_samples
+        )
         
         logger.info(f"Final test set size: {len(test_set)}")
         
@@ -142,7 +139,7 @@ def run_evaluation(args, logger):
         logger.info("Starting evaluation of responses")
         eval_util.evaluate(
             responses=responses,
-            results_directory=args.results_directory,
+            results_directory=results_directory,
             classification_report_filepath=args.classification_report_filepath,
             confusion_matrix_filepath=args.confusion_matrix_filepath,
             mcc_filepath=args.mcc_filepath,
@@ -156,7 +153,7 @@ def run_evaluation(args, logger):
         )
 
         # Save responses
-        responses_path = os.path.join(args.results_directory, args.responses_file)
+        responses_path = os.path.join(results_directory, args.responses_file)
         logger.info(f"Saving responses to {responses_path}")
         with open(responses_path, 'w') as f:
             json.dump(responses, f)
@@ -191,10 +188,14 @@ def setup_telemetry(logger):
 if __name__ == '__main__':
     # Parse arguments
     args = parse_args()
+
+    # Set up results directory
+    results_directory = os.path.join("eval_results", args.results_directory)
+    os.makedirs(results_directory, exist_ok=True)
     
     # Setup logging with specified level
     log_level = getattr(logging, args.log_level.upper())
-    logger = setup_logging(log_level, args.results_directory)
+    logger = setup_logging(results_directory, log_level)
     
     logger.info("Starting AITA Agent evaluation script")
     
@@ -202,7 +203,7 @@ if __name__ == '__main__':
         load_dotenv(find_dotenv())
         freeze_support()
         setup_telemetry(logger)
-        run_evaluation(args, logger)
+        run_evaluation(args, logger, results_directory)
     except Exception as e:
         logger.critical(f"Critical error in main execution: {str(e)}", exc_info=True)
         raise
