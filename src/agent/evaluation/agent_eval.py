@@ -6,7 +6,7 @@ from datetime import datetime
 from dotenv import load_dotenv, find_dotenv
 from datasets import load_dataset
 import json
-from ..AITA_Agent import AITA_Agent
+from ..agents import AITA_Basic_Agent, AITA_RAG_Agent
 from .eval_util import Evaluation_Utility
 from opentelemetry.sdk import trace as trace_sdk
 from opentelemetry.sdk.trace.export import SimpleSpanProcessor
@@ -60,13 +60,18 @@ def parse_args():
                       default='MattBoraske/reddit-AITA-submissions-and-comments-multiclass',
                       help='HuggingFace dataset path')
     parser.add_argument('--sampling', type=str, default='complete',
-                        choices=['complete, balanced', 'weighted'],
+                        choices=['complete', 'balanced', 'weighted'],
                         help='Dataset sampling strategy')
     parser.add_argument('--balanced-samples-per-class', type=int, default=1,
                       help='Number of samples per class for balanced sampling')
     parser.add_argument('--weighted-total-samples', type=int, default=12,
                         help='Total number of samples to use for weighted sampling')
     
+    # Evaluation parameters
+    parser.add_argument('--eval-type', type=str, default='classification',
+                        choices=['BASIC', 'RAG'],
+                        help='Type of evaluation to perform')
+
     # Output file parameters
     parser.add_argument('--results-directory', type=str, default='agent_eval')
     parser.add_argument('--responses-file', type=str, default='responses.json')
@@ -100,15 +105,25 @@ def run_evaluation(args, logger, results_directory):
         eval_util = Evaluation_Utility()
 
         # Initialize workflow
-        logger.info("Initializing AITA Agent workflow")
-        workflow = AITA_Agent(
-            timeout=args.timeout,
-            llm_provider=args.llm_provider,
-            llm_endpoint=args.llm_endpoint,
-            embedding_model_endpoint=args.embedding_model,
-            pinecone_vector_index=args.pinecone_index,
-            docs_to_retrieve=args.docs_to_retrieve,
-        )
+        if args.eval_type == 'BASIC':
+            logger.info("Initializing AITA Basic Agent workflow")
+            workflow = AITA_Basic_Agent(
+                timeout=args.timeout,
+                llm_provider=args.llm_provider,
+                llm_endpoint=args.llm_endpoint
+            )
+        elif args.eval_type == 'RAG':
+            logger.info("Initializing AITA RAG Agent workflow")
+            workflow = AITA_RAG_Agent(
+                timeout=args.timeout,
+                llm_provider=args.llm_provider,
+                llm_endpoint=args.llm_endpoint,
+                embedding_model_endpoint=args.embedding_model,
+                pinecone_vector_index=args.pinecone_index,
+                docs_to_retrieve=args.docs_to_retrieve,
+            )
+        else:
+            raise ValueError(f"Invalid evaluation type: {args.eval_type}")
         
         # Load and prepare dataset
         logger.info(f"Loading dataset from {args.dataset}")
@@ -132,7 +147,7 @@ def run_evaluation(args, logger, results_directory):
         
         # Collect responses
         logger.info("Starting response collection")
-        responses = asyncio.run(eval_util.collect_responses(workflow, test_set))
+        responses = asyncio.run(eval_util.collect_responses(workflow, test_set, args.eval_type))
         logger.info(f"Collected {len(responses)} responses")
 
         # Run evaluation
@@ -140,6 +155,7 @@ def run_evaluation(args, logger, results_directory):
         eval_util.evaluate(
             responses=responses,
             results_directory=results_directory,
+            eval_type = args.eval_type,
             classification_report_filepath=args.classification_report_filepath,
             confusion_matrix_filepath=args.confusion_matrix_filepath,
             mcc_filepath=args.mcc_filepath,

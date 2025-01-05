@@ -1,0 +1,10 @@
+{
+    "train": {
+        "toxic": 0.181875,
+        "non_toxic": 0.818125
+    },
+    "test": {
+        "toxic": 0.1775,
+        "non_toxic": 0.8225
+    }
+}

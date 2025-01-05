@@ -2,22 +2,31 @@
 TO DO
 -----
 
-0. add way to store agent parameters (num docs retrieved, vs_index, llm_endpoint, etc.) with results
+WHAT DOES A GOOD TEST SET LOOK LIKE FOR RETRIEVAL?
+    - balanced? weighted? using complete test dataset is hard due to # of samples
+    - think doing balanced first when sharing w/ dr. burns makes sense
 
-1. add directory where logs are stored for vs_creation requirements
+- add code for dataset collection/creation (helps validate legitimacy of HF dataset)
+    - need to do this to get better train/test splits for retrieval
+        - right now the test set from the finetuning dataset is too large (too expensive to evaluate)
+        - would be nice instead to make the test set 5 or even 2% instead of 10% of total data
 
-2. fix requirements.txt
+    - collection = making initial data files using reddit API
+    - creation = refinements done to create HF dataset used to train model
+    - store initial data file on S3 and include links to download them in the README
+    
+
+- add way to store agent parameters (num docs retrieved, vs_index, llm_endpoint, etc.) with results
+
+- add directory where logs are stored for vs_creation requirements
+
+- fix requirements.txt
     - add specific library versions
     - issue seems to be using the comet model with current installed library versions
         - could also be an issue with running comet on mac...
 
-3. update readme
+-update readme
 
-2. add code for dataset collection/creation (helps validate legitimacy of HF dataset)
-    - collection = making initial data files using reddit API
-    - creation = refinements done to create HF dataset used to train model
-    - store initial data file on S3 and include links to download them in the README
-
-3. consider what an a complete end to end experiment pipeline would look like
+-consider what an a complete end to end experiment pipeline would look like
     - not sure if its worth it though... would be if we had a constant source of new data to index
         - maybe it would be though to run experiments on vector stores containing different 1) data subsets or 2) embeddings

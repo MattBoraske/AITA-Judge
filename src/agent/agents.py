@@ -33,25 +33,56 @@ class RerankEvent(Event):
 
   nodes: list[NodeWithScore]
 
+class AITA_Basic_Agent(Workflow):
+  
+  def __init__(
+    self,
+    timeout=60,
+    llm_provider='openai',
+    llm_endpoint='gpt-4o-mini'
+  ):
+    super().__init__(timeout=timeout)
+    self.LLM_PROVIDER = llm_provider
+    self.LLM_ENDPOINT  = llm_endpoint
+    self.prompts = AITA_Prompt_Library.PROMPTS
 
-class AITA_Agent(Workflow):
+  @step 
+  async def get_response(
+    self, ev: StartEvent
+  ) -> StopEvent:
+    """Entry point for the agent"""
+    #print('BEGIN GET RESPONSE EVENT')
+
+    if self.LLM_PROVIDER == 'groq':
+      llm = Groq(model='gpt-4o-mini', api_key=os.getenv('GROQ_API_KEY'))
+    else:
+      llm = OpenAI(model='gpt-4o-mini', api_key=os.getenv('OPENAI_API_KEY'))
+    
+    prompt_template = self.prompts['AITA_text_qa_template']
+    prompt = prompt_template.format(query_str=ev.get('query'))
+
+    response = await llm.acomplete(prompt)
+
+    return StopEvent(result=response)
+
+class AITA_RAG_Agent(Workflow):
 
   def __init__(
-        self,
-        timeout=60,
-        llm_provider='openai',
-        llm_endpoint='gpt-4o-mini',
-        embedding_model_endpoint='text-embedding-3-small',
-        pinecone_vector_index='aita-text-embedding-3-small',
-        docs_to_retrieve=3
+      self,
+      timeout=60,
+      llm_provider='openai',
+      llm_endpoint='gpt-4o-mini',
+      embedding_model_endpoint='text-embedding-3-small',
+      pinecone_vector_index='aita-text-embedding-3-small-v2',
+      docs_to_retrieve=5
     ):
-        super().__init__(timeout=timeout)
-        self.LLM_PROVIDER = llm_provider
-        self.LLM_ENDPOINT  = llm_endpoint
-        self.EMBEDDING_MODEL_ENDPOINT = embedding_model_endpoint
-        self.PINECONE_VECTOR_INDEX  = pinecone_vector_index
-        self.DOCS_TO_RETRIEVE  = docs_to_retrieve
-        self.prompts = AITA_Prompt_Library.PROMPTS
+      super().__init__(timeout=timeout)
+      self.LLM_PROVIDER = llm_provider
+      self.LLM_ENDPOINT  = llm_endpoint
+      self.EMBEDDING_MODEL_ENDPOINT = embedding_model_endpoint
+      self.PINECONE_VECTOR_INDEX  = pinecone_vector_index
+      self.DOCS_TO_RETRIEVE  = docs_to_retrieve
+      self.prompts = AITA_Prompt_Library.PROMPTS
 
   @step
   async def retrieve(self, ctx: Context, ev: StartEvent) -> RetrieverEvent | None:
@@ -116,8 +147,8 @@ class AITA_Agent(Workflow):
     response_synthesizer = get_response_synthesizer(
       response_mode="refine",
       llm=llm,
-      text_qa_template=self.prompts['AITA_text_qa_template'],
-      refine_template=self.prompts['AITA_refine_qa_template'],
+      text_qa_template=self.prompts['AITA_text_qa_RAG_template'],
+      refine_template=self.prompts['AITA_refine_qa_RAG_template'],
       streaming=True,
       verbose=True
     )

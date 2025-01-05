@@ -2,7 +2,7 @@ import asyncio
 import os
 from dotenv import load_dotenv, find_dotenv
 
-from .AITA_Agent import AITA_Agent
+from agents import AITA_Basic_Agent, AITA_RAG_Agent
 
 from opentelemetry.sdk import trace as trace_sdk
 from opentelemetry.sdk.trace.export import SimpleSpanProcessor
@@ -23,14 +23,11 @@ TEST_QUERIES = [
     """
 ]
 
-# define the workflow to run
-AITA_workflow = AITA_Agent(
-    docs_to_retrieve=5,
-    timeout=300
-)
-
-async def single_response_CLI():
+async def single_response_CLI(agent):
     async with asyncio.timeout(600):  # 10 minutes timeout
+        agent_type = agent.__class__.__name__
+        print(f'Testing {agent_type} agent')
+
         # test query
         query = TEST_QUERIES[0]
 
@@ -41,13 +38,18 @@ async def single_response_CLI():
         print('-'*10)
         print('\nRESPONSE') 
         print('-'*10)
-        result = await AITA_workflow.run(query=query)
-        async for chunk in result.async_response_gen():
-            print(chunk, end="", flush=True)
+        result = await agent.run(query=query)
+        # check if agent is of type AITA_RAG_Agent
+        if agent_type == 'AITA_RAG_Agent':
+            async for chunk in result.async_response_gen():
+                print(chunk, end="", flush=True)
+        elif agent_type == 'AITA_Basic_Agent':
+            print(result)
+        else:
+            print('ERROR: Invalid agent type')
         print()
         print('-'*10)
 
-# Make this script runnable from the shell to test the workflow execution
 if __name__ == "__main__":
     load_dotenv(find_dotenv())
 
@@ -66,5 +68,9 @@ if __name__ == "__main__":
     # Instrument the application
     LlamaIndexInstrumentor().instrument(tracer_provider=tracer_provider)
 
+    # define the workflow to run
+    #agent = AITA_RAG_Agent()
+    agent = AITA_Basic_Agent()
+
     # Run workflow
-    asyncio.run(single_response_CLI())
+    asyncio.run(single_response_CLI(agent))

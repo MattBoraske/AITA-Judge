@@ -1,0 +1,68 @@
+{
+    "submission_texts": {
+        "avg_length_before_removing_edits": 2030.306179775281,
+        "edits_removed": 19360,
+        "avg_length_after_removing_edits": 1857.7493070336088,
+        "avg_length_percent_change": -8.499056667441712
+    },
+    "top_comment_1": {
+        "avg_length_before_removing_edits": 270.79911399297134,
+        "edits_removed": 2792,
+        "avg_length_after_removing_edits": 263.2933846458447,
+        "avg_length_percent_change": -2.771696419701528
+    },
+    "top_comment_2": {
+        "avg_length_before_removing_edits": 312.0714365304379,
+        "edits_removed": 2224,
+        "avg_length_after_removing_edits": 305.5859652598086,
+        "avg_length_percent_change": -2.0782008577054625
+    },
+    "top_comment_3": {
+        "avg_length_before_removing_edits": 319.5955087018901,
+        "edits_removed": 1824,
+        "avg_length_after_removing_edits": 314.5787536647745,
+        "avg_length_percent_change": -1.5697201307653699
+    },
+    "top_comment_4": {
+        "avg_length_before_removing_edits": 320.8074578794061,
+        "edits_removed": 1623,
+        "avg_length_after_removing_edits": 315.9895420307708,
+        "avg_length_percent_change": -1.5018091787773877
+    },
+    "top_comment_5": {
+        "avg_length_before_removing_edits": 326.2108493314005,
+        "edits_removed": 1542,
+        "avg_length_after_removing_edits": 321.0280446003983,
+        "avg_length_percent_change": -1.5887898092981376
+    },
+    "top_comment_6": {
+        "avg_length_before_removing_edits": 326.99670469690534,
+        "edits_removed": 1217,
+        "avg_length_after_removing_edits": 322.97144070651296,
+        "avg_length_percent_change": -1.2309799862122188
+    },
+    "top_comment_7": {
+        "avg_length_before_removing_edits": 325.05471392616107,
+        "edits_removed": 1078,
+        "avg_length_after_removing_edits": 320.9991824171596,
+        "avg_length_percent_change": -1.2476458070756413
+    },
+    "top_comment_8": {
+        "avg_length_before_removing_edits": 326.4120996315817,
+        "edits_removed": 1022,
+        "avg_length_after_removing_edits": 322.35882881771226,
+        "avg_length_percent_change": -1.2417648789503664
+    },
+    "top_comment_9": {
+        "avg_length_before_removing_edits": 326.63363474076374,
+        "edits_removed": 824,
+        "avg_length_after_removing_edits": 323.18033995653525,
+        "avg_length_percent_change": -1.057237962333314
+    },
+    "top_comment_10": {
+        "avg_length_before_removing_edits": 330.25618389628113,
+        "edits_removed": 769,
+        "avg_length_after_removing_edits": 326.4677371204367,
+        "avg_length_percent_change": -1.1471236453922704
+    }
+}

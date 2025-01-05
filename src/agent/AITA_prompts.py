@@ -37,6 +37,18 @@ class AITA_Prompt_Library:
     PROMPTS = {
         'AITA_text_qa_template': PromptTemplate(
         f"{AITA_context}\n"
+        "Provide your judgment of this AITA conflict:\n"
+        "---------------------\n"
+        "{query_str}\n"
+        "---------------------\n\n"
+        "You MUST follow these rules:\n"
+        f"\t- You MUST judge the ORIGINAL AITA conflict and NOT the NEW conflict.\n"
+        f"{AITA_rules}\n"
+        "Your initial judgment: "
+    ),
+            
+        'AITA_text_qa_RAG_template': PromptTemplate(
+        f"{AITA_context}\n"
         "Study this NEW AITA conflict and judgement carefully:\n"
         "---------------------\n"
         "{context_str}\n"
@@ -51,7 +63,7 @@ class AITA_Prompt_Library:
         "Your initial judgment: "
     ),
     
-    'AITA_refine_qa_template': PromptTemplate(
+    'AITA_refine_qa_RAG_template': PromptTemplate(
       f"{AITA_context}\n\n"
       "You are refining your judgment on this ORIGINAL AITA conflict:\n"
       "---------------------\n"      

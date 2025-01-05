@@ -33,15 +33,16 @@ class Evaluation_Utility():
     ) -> list[dict]:
         """
         Create a test set from a DataFrame containing test data with options for different sampling strategies.
+        Samples are selected based on highest submission scores within each classification.
         
         Args:
             df (pd.DataFrame): DataFrame containing the test dataset
             sampling (str): Sampling strategy to use:
                 - 'full': Use entire dataset (default)
-                - 'balanced': Equal samples per class
-                - 'weighted': Maintain class proportions with reduced size
-            samples_per_class (int, optional): Number of samples per class when sampling='balanced'
-            total_samples (int, optional): Total number of samples when sampling='weighted'
+                - 'balanced': Equal samples per class, taking highest scored submissions
+                - 'weighted': Maintain class proportions with reduced size, taking highest scored submissions
+            balanced_samples_per_class (int, optional): Number of samples per class when sampling='balanced'
+            weighted_total_samples (int, optional): Total number of samples when sampling='weighted'
             
         Returns:
             list[dict]: Test set containing query, top comment, and classification
@@ -53,9 +54,12 @@ class Evaluation_Utility():
                 if balanced_samples_per_class is None:
                     balanced_samples_per_class = 10
                 self.logger.info(f"Creating balanced test set with {balanced_samples_per_class} samples per class")
+                
+                # Sort within each class by submission_score and take top N
                 df = (df.groupby('top_comment_1_classification')
-                    .apply(lambda x: x.sample(n=min(len(x), balanced_samples_per_class)))
+                    .apply(lambda x: x.nlargest(balanced_samples_per_class, 'submission_score'))
                     .reset_index(drop=True))
+                    
                 self.logger.debug(f"Class distribution in balanced set: {df['top_comment_1_classification'].value_counts()}")
                 
             elif sampling == 'weighted':
@@ -73,18 +77,15 @@ class Evaluation_Utility():
                 # Adjust for rounding errors to match total_samples exactly
                 diff = weighted_total_samples - class_samples.sum()
                 if diff != 0:
-                    # Add/subtract the difference from the largest class
                     largest_class = class_samples.index[0]
                     class_samples[largest_class] += diff
                 
-                # Sample from each class according to calculated proportions
+                # Sample from each class according to calculated proportions, taking highest scored submissions
                 sampled_df = pd.DataFrame()
                 for class_label, n_samples in class_samples.items():
                     class_df = df[df['top_comment_1_classification'] == class_label]
-                    sampled_df = pd.concat([
-                        sampled_df,
-                        class_df.sample(n=min(len(class_df), n_samples))
-                    ])
+                    top_scored_samples = class_df.nlargest(n_samples, 'submission_score')
+                    sampled_df = pd.concat([sampled_df, top_scored_samples])
                 
                 df = sampled_df.reset_index(drop=True)
                 
@@ -110,7 +111,7 @@ class Evaluation_Utility():
             self.logger.error(f"Error creating test set: {str(e)}", exc_info=True)
             raise
 
-    async def collect_responses(self, workflow: Workflow, test_set: list[tuple]):
+    async def collect_responses(self, workflow: Workflow, test_set: list[tuple], eval_type: str):
         """Collect responses from the workflow for each sample in the test set."""
         self.logger.info(f"Starting response collection for {len(test_set)} samples")
         test_responses = []
@@ -121,28 +122,40 @@ class Evaluation_Utility():
                 self.logger.debug(f"Processing sample {i+1}/{len(test_set)}")
                 result = await workflow.run(query=test_set[i]['query'])
 
-                retrieved_doc_contents = []
-                for node in result.source_nodes:
-                    retrieved_doc_contents.append({
-                        'text': node.text,
-                        'classification': node.metadata['Correct Classification'],
-                        'justification': node.metadata['Correct Justification']
+                if eval_type == 'BASIC':
+                    test_responses.append({
+                        'response': result.text,
+                        'query': test_set[i]['query'],
+                        'top_comment': test_set[i]['top_comment'],
+                        'top_comment_classification': test_set[i]['top_comment_classification']
                     })
                 
-                response = ""
-                async for chunk in result.async_response_gen():
-                    response += chunk
+                elif eval_type == 'RAG':
+                    retrieved_doc_contents = []
+                    for node in result.source_nodes:
+                        retrieved_doc_contents.append({
+                            'text': node.text,
+                            'classification': node.metadata['Correct Classification'],
+                            'justification': node.metadata['Correct Justification']
+                        })
+                    
+                    response = ""
+                    async for chunk in result.async_response_gen():
+                        response += chunk
 
-                test_responses.append({
-                    'response': response,
-                    'query': test_set[i]['query'],
-                    'retrieved_docs': retrieved_doc_contents,
-                    'top_comment': test_set[i]['top_comment'],
-                    'top_comment_classification': test_set[i]['top_comment_classification']
-                })
+                    test_responses.append({
+                        'response': response,
+                        'query': test_set[i]['query'],
+                        'retrieved_docs': retrieved_doc_contents,
+                        'top_comment': test_set[i]['top_comment'],
+                        'top_comment_classification': test_set[i]['top_comment_classification']
+                    })
+                    
+                else:
+                    raise ValueError(f"Invalid evaluation type: {eval_type}")
                 
                 self.logger.debug(f"Successfully processed sample {i+1}")
-                
+
             except Exception as e:
                 error_count += 1
                 self.logger.warning(f"Error processing sample {i}: {str(e)}")
@@ -183,14 +196,21 @@ class Evaluation_Utility():
             self.logger.error(f"Error parsing AITA classification: {str(e)}", exc_info=True)
             raise
 
-    def evaluate(self, responses: list[dict], results_directory: str,
+    def evaluate(self, responses: list[dict], results_directory: str, eval_type: str,
                 classification_report_filepath: str, confusion_matrix_filepath: str,
                 mcc_filepath: str, rouge_filepath: str, bleu_filepath: str,
                 comet_filepath: str, toxicity_stats_filepath: str,
                 toxicity_plot_filepath: str, retrieval_eval_filepath: str,
                 retrieval_eval_summary_filepath: str):
         """Evaluate classifications and justifications from the responses."""
-        self.logger.info("Starting comprehensive evaluation")
+        self.logger.info("Starting evaluation")
+
+        if eval_type == 'BASIC':
+            self.logger.info("Performing basic evaluation")
+        elif eval_type == 'RAG':
+            self.logger.info("Performing RAG evaluation")
+        else:
+            raise ValueError(f"Invalid evaluation type: {eval_type}")
         
         try:
             self.logger.info("Evaluating classifications...")
@@ -212,19 +232,20 @@ class Evaluation_Utility():
                 toxicity_stats_filepath=toxicity_stats_filepath,
                 toxicity_plot_filepath=toxicity_plot_filepath
             )
+
+            if eval_type == 'RAG':
+                self.logger.info("Evaluating retrieval...")
+                self.evaluate_retrieval(
+                    responses=responses,
+                    results_directory=results_directory,
+                    retrieval_eval_filepath=retrieval_eval_filepath,
+                    retrieval_eval_summary_filepath=retrieval_eval_summary_filepath
+                )
             
-            self.logger.info("Evaluating retrieval...")
-            self.evaluate_retrieval(
-                responses=responses,
-                results_directory=results_directory,
-                retrieval_eval_filepath=retrieval_eval_filepath,
-                retrieval_eval_summary_filepath=retrieval_eval_summary_filepath
-            )
-            
-            self.logger.info("Comprehensive evaluation completed successfully")
+            self.logger.info("Evaluation completed successfully")
             
         except Exception as e:
-            self.logger.error(f"Error during comprehensive evaluation: {str(e)}", exc_info=True)
+            self.logger.error(f"Error during evaluation: {str(e)}", exc_info=True)
             raise
 
     def evaluate_classifications(self, responses: list[dict], results_directory: str,
@@ -333,12 +354,12 @@ class Evaluation_Utility():
             self.logger.debug(f"BLEU scores saved to {bleu_path}")
 
             # Calculate COMET scores
-            self.logger.info("Calculating COMET scores")
-            comet_metric = evaluate.load('comet')
-            comet_score = comet_metric.compute(predictions=predictions, references=references, sources=sources)
-            comet_path = os.path.join(results_directory, comet_filepath)
-            with open(comet_path, 'w') as f:
-                json.dump(comet_score, f)
+            #self.logger.info("Calculating COMET scores")
+            #comet_metric = evaluate.load('comet')
+            #comet_score = comet_metric.compute(predictions=predictions, references=references, sources=sources)
+            #comet_path = os.path.join(results_directory, comet_filepath)
+            #with open(comet_path, 'w') as f:
+            #    json.dump(comet_score, f)
 
             # Toxicity analysis
             self.logger.info("Starting toxicity analysis")
@@ -564,8 +585,8 @@ class Evaluation_Utility():
             self.logger.error(f"Error generating toxicity plot: {str(e)}", exc_info=True)
             raise
 
-    def evaluate_retrieval(self, responses: list[dict], results_directory: str,
-                          retrieval_eval_filepath: str, retrieval_eval_summary_filepath: str):
+    def evaluate_retrieval(self, responses: list[dict], results_directory: str, 
+                        retrieval_eval_filepath: str, retrieval_eval_summary_filepath: str):
         """Evaluate the quality of document retrieval for AITA classifications."""
         self.logger.info("Starting retrieval evaluation")
         
@@ -577,14 +598,14 @@ class Evaluation_Utility():
             for idx, response in enumerate(responses, 1):
                 if idx % 50 == 0:
                     self.logger.debug(f"Processed {idx}/{total_responses} responses")
-                    
+                
                 # Get true classification and document classifications
                 true_classification = response['top_comment_classification']
                 doc_classifications = [doc['classification'] for doc in response['retrieved_docs']]
                 
                 # Get top retrieved doc classification
                 top_doc_classification = doc_classifications[0]
-
+                
                 # Count classifications
                 classification_counts = {c: 0 for c in self.AITA_classifications}
                 for classification in doc_classifications:
@@ -592,8 +613,8 @@ class Evaluation_Utility():
                 
                 # Calculate match ratio
                 correct_classification_ratio = (classification_counts[true_classification] / 
-                                             len(doc_classifications))
-
+                                        len(doc_classifications))
+                
                 # Store results
                 retrieval_evaluations.append({
                     'true_class': true_classification,
@@ -601,18 +622,52 @@ class Evaluation_Utility():
                     'class_counts': classification_counts,
                     'doc_class_match_accuracy': correct_classification_ratio
                 })
-
+            
             # Calculate summary metrics
             self.logger.info("Calculating retrieval summary metrics")
+            
+            # Calculate overall metrics
+            overall_top_accuracy = sum(
+                x['top_doc_class'] == x['true_class'] for x in retrieval_evaluations
+            ) / len(retrieval_evaluations)
+            
+            overall_doc_accuracy = sum(
+                x['doc_class_match_accuracy'] for x in retrieval_evaluations
+            ) / len(retrieval_evaluations)
+            
+            # Calculate per-class metrics
+            class_metrics = {}
+            for classification in self.AITA_classifications:
+                # Filter evaluations for this class
+                class_evals = [x for x in retrieval_evaluations if x['true_class'] == classification]
+                
+                if class_evals:  # Only calculate if we have examples for this class
+                    class_metrics[classification] = {
+                        'num_conflicts': len(class_evals),
+                        'top_doc_accuracy': sum(
+                            x['top_doc_class'] == x['true_class'] for x in class_evals
+                        ) / len(class_evals),
+                        'avg_doc_accuracy': sum(
+                            x['doc_class_match_accuracy'] for x in class_evals
+                        ) / len(class_evals)
+                    }
+                else:
+                    class_metrics[classification] = {
+                        'num_conflicts': 0,
+                        'top_doc_accuracy': 0.0,
+                        'avg_doc_accuracy': 0.0
+                    }
+            
+            # Combine all metrics
             summary_results = {
-                'avg_top_doc_class_match_accuracy': sum(
-                    x['top_doc_class'] == x['true_class'] for x in retrieval_evaluations
-                ) / len(retrieval_evaluations),
-                'avg_doc_class_match_accuracy': sum(
-                    x['doc_class_match_accuracy'] for x in retrieval_evaluations
-                ) / len(retrieval_evaluations)
+                'overall_metrics': {
+                    'total_conflicts': len(retrieval_evaluations),
+                    'avg_top_doc_class_match_accuracy': overall_top_accuracy,
+                    'avg_doc_class_match_accuracy': overall_doc_accuracy
+                },
+                'per_class_metrics': class_metrics
             }
-
+            
             # Save detailed results
             self.logger.debug("Saving detailed retrieval evaluation")
             eval_path = os.path.join(results_directory, retrieval_eval_filepath)
@@ -627,10 +682,18 @@ class Evaluation_Utility():
                 json.dump(summary_results, f)
             self.logger.debug(f"Retrieval summary metrics saved to {summary_path}")
             
+            # Log overall results
             self.logger.info("Retrieval evaluation completed successfully")
-            self.logger.info(f"Top document classification accuracy: {summary_results['avg_top_doc_class_match_accuracy']:.2%}")
-            self.logger.info(f"Average document classification accuracy: {summary_results['avg_doc_class_match_accuracy']:.2%}")
+            self.logger.info(f"Overall top document classification accuracy: {overall_top_accuracy:.2%}")
+            self.logger.info(f"Overall average document classification accuracy: {overall_doc_accuracy:.2%}")
             
+            # Log per-class results
+            for classification, metrics in class_metrics.items():
+                self.logger.info(f"\nMetrics for {classification}:")
+                self.logger.info(f"  Count: {metrics['num_conflicts']}")
+                self.logger.info(f"  Top document accuracy: {metrics['top_doc_accuracy']:.2%}")
+                self.logger.info(f"  Average document accuracy: {metrics['avg_doc_accuracy']:.2%}")
+        
         except Exception as e:
             self.logger.error(f"Error during retrieval evaluation: {str(e)}", exc_info=True)
             raise
