@@ -10,10 +10,11 @@ WHAT DOES A GOOD TEST SET LOOK LIKE FOR RETRIEVAL?
     - need to do this to get better train/test splits for retrieval
         - right now the test set from the finetuning dataset is too large (too expensive to evaluate)
         - would be nice instead to make the test set 5 or even 2% instead of 10% of total data
-
+        
     - collection = making initial data files using reddit API
     - creation = refinements done to create HF dataset used to train model
     - store initial data file on S3 and include links to download them in the README
+        - README in general should explain data collection process
     
 
 - add way to store agent parameters (num docs retrieved, vs_index, llm_endpoint, etc.) with results
