@@ -1,0 +1,151 @@
+2025-01-07 12:36:59,640 - __main__ - INFO - Starting AITA Agent evaluation script
+2025-01-07 12:36:59,641 - __main__ - INFO - Setting up telemetry
+2025-01-07 12:36:59,688 - __main__ - INFO - Telemetry setup completed successfully
+2025-01-07 12:36:59,688 - __main__ - INFO - Starting evaluation process
+2025-01-07 12:36:59,689 - __main__ - INFO - Initializing Evaluation Utility
+2025-01-07 12:36:59,689 - src.agent.evaluation.eval_util - INFO - Initialized Evaluation_Utility
+2025-01-07 12:36:59,689 - __main__ - INFO - Initializing AITA Basic Agent workflow
+2025-01-07 12:36:59,689 - __main__ - INFO - Loading dataset from MattBoraske/reddit-AITA-submissions-and-comments-multiclass
+2025-01-07 12:37:01,530 - __main__ - INFO - Dataset size after filtering: 9867
+2025-01-07 12:37:01,530 - __main__ - INFO - Creating test set
+2025-01-07 12:37:01,531 - src.agent.evaluation.eval_util - INFO - Creating test set using balanced sampling strategy
+2025-01-07 12:37:01,531 - src.agent.evaluation.eval_util - INFO - Creating balanced test set with 25 samples per class
+2025-01-07 12:37:01,551 - src.agent.evaluation.eval_util - INFO - Successfully created test set with 100 samples
+2025-01-07 12:37:01,551 - __main__ - INFO - Final test set size: 100
+2025-01-07 12:37:01,552 - __main__ - INFO - Starting response collection
+2025-01-07 12:37:01,552 - src.agent.evaluation.eval_util - INFO - Starting response collection for 100 samples
+2025-01-07 12:37:03,735 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:37:03,846 - openinference.instrumentation.llama_index._handler - ERROR - Error serializing to JSON: PydanticSerializationError: Error calling function `custom_model_dump`: TypeError: 'MockValSer' object cannot be converted to 'SchemaSerializer'
+Traceback (most recent call last):
+  File "C:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\openinference\instrumentation\llama_index\_handler.py", line 253, in process_output
+    self[OUTPUT_VALUE] = result.model_dump_json(exclude_unset=True)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mattb\Documents\GitHub\AITA-Judge-Agent\.venv\Lib\site-packages\pydantic\main.py", line 477, in model_dump_json
+    return self.__pydantic_serializer__.to_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.PydanticSerializationError: Error serializing to JSON: PydanticSerializationError: Error calling function `custom_model_dump`: TypeError: 'MockValSer' object cannot be converted to 'SchemaSerializer'
+2025-01-07 12:37:05,668 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:37:08,339 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:37:10,516 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:37:13,125 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:37:15,611 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:37:17,685 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:37:20,450 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:37:22,295 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:37:25,358 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:37:26,978 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:37:29,651 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:37:32,168 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:37:34,505 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:37:36,151 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:37:38,193 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:37:40,274 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:37:42,023 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:37:44,558 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:37:47,772 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:37:50,136 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:37:52,575 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:37:54,909 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:37:56,986 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:38:00,402 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:38:02,671 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:38:04,926 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:38:07,518 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:38:09,296 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:38:12,396 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:38:14,609 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:38:16,848 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:38:19,759 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:38:22,529 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:38:25,279 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:38:27,097 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:38:35,217 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:38:39,013 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:38:41,402 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:38:43,841 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:38:46,000 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:38:48,390 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:38:51,336 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:38:53,942 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:38:56,579 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:38:59,062 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:39:01,389 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:39:03,870 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:39:06,232 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:39:08,569 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:39:11,856 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:39:16,566 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:39:18,664 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:39:20,752 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:39:23,878 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:39:25,790 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:39:27,630 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:39:30,229 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:39:31,876 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:39:34,373 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:39:36,872 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:39:39,567 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:39:41,738 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:39:44,790 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:39:47,042 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:39:49,478 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:39:52,072 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:39:53,684 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:39:55,490 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:39:58,465 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:40:01,653 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:40:04,594 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:40:06,797 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:40:08,997 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:40:11,380 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:40:13,095 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:40:15,235 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:40:17,032 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:40:21,228 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:40:23,583 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:40:25,568 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:40:27,643 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:40:30,324 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:40:32,283 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:40:34,158 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:40:36,975 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:40:39,505 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:40:42,704 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:40:45,501 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:40:47,513 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:40:49,861 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:40:52,890 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:40:55,750 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:40:58,174 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:41:00,664 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:41:02,964 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:41:05,689 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:41:08,074 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:41:11,615 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:41:14,558 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-07 12:41:14,782 - src.agent.evaluation.eval_util - INFO - Response collection completed. Successful: 100, Failed: 0
+2025-01-07 12:41:14,784 - __main__ - INFO - Collected 100 responses
+2025-01-07 12:41:14,784 - __main__ - INFO - Starting evaluation of responses
+2025-01-07 12:41:14,785 - src.agent.evaluation.eval_util - INFO - Starting evaluation
+2025-01-07 12:41:14,785 - src.agent.evaluation.eval_util - INFO - Performing basic evaluation
+2025-01-07 12:41:14,785 - src.agent.evaluation.eval_util - INFO - Evaluating classifications...
+2025-01-07 12:41:14,785 - src.agent.evaluation.eval_util - INFO - Starting classification evaluation
+2025-01-07 12:41:14,785 - src.agent.evaluation.eval_util - INFO - Generating classification report
+2025-01-07 12:41:14,792 - src.agent.evaluation.eval_util - INFO - Generating confusion matrix
+2025-01-07 12:41:15,008 - src.agent.evaluation.eval_util - INFO - Calculating Matthews Correlation Coefficient
+2025-01-07 12:41:15,413 - src.agent.evaluation.eval_util - INFO - Classification evaluation completed successfully
+2025-01-07 12:41:15,414 - src.agent.evaluation.eval_util - INFO - Evaluating justifications...
+2025-01-07 12:41:15,414 - src.agent.evaluation.eval_util - INFO - Starting justification evaluation
+2025-01-07 12:41:15,414 - src.agent.evaluation.eval_util - INFO - Calculating ROUGE scores
+2025-01-07 12:41:15,851 - absl - INFO - Using default tokenizer.
+2025-01-07 12:41:16,114 - src.agent.evaluation.eval_util - INFO - Calculating BLEU scores
+2025-01-07 12:41:17,071 - src.agent.evaluation.eval_util - INFO - Starting toxicity analysis
+2025-01-07 12:41:22,297 - src.agent.evaluation.eval_util - INFO - Calculating toxicity statistics
+2025-01-07 12:41:22,299 - src.agent.evaluation.eval_util - INFO - Generating toxicity visualization
+2025-01-07 12:41:22,299 - src.agent.evaluation.eval_util - INFO - Generating toxicity score visualization
+2025-01-07 12:41:22,983 - src.agent.evaluation.eval_util - INFO - Toxicity plot saved to eval_results\aita-text-embedding-3-large-v2-gpt-4o-2024-11-20-balanced-100-BASIC\toxicity_plot.png
+2025-01-07 12:41:22,983 - src.agent.evaluation.eval_util - INFO - Justification evaluation completed successfully
+2025-01-07 12:41:22,990 - src.agent.evaluation.eval_util - INFO - Evaluation completed successfully
+2025-01-07 12:41:22,990 - __main__ - INFO - Saving responses to eval_results\aita-text-embedding-3-large-v2-gpt-4o-2024-11-20-balanced-100-BASIC\responses.json
+2025-01-07 12:41:22,997 - __main__ - INFO - Evaluation process completed successfully
+2025-01-07 12:41:23,023 - __main__ - INFO - Script execution completed
