@@ -200,7 +200,7 @@ def main() -> None:
         
     except Exception as e:
         logger.error(f"Vector store creation failed: {str(e)}")
-        sys.exit(1)
+         
 
 if __name__ == '__main__':
     main()

@@ -1,0 +1,66 @@
+2025-01-14 16:20:02,137 - __main__ - INFO - Starting AITA Agent evaluation script
+2025-01-14 16:20:02,138 - __main__ - INFO - Setting up telemetry
+2025-01-14 16:20:02,168 - __main__ - INFO - Telemetry setup completed successfully
+2025-01-14 16:20:02,168 - __main__ - INFO - Starting evaluation process
+2025-01-14 16:20:02,168 - __main__ - INFO - Initializing Evaluation Utility
+2025-01-14 16:20:02,168 - src.agent.evaluation.eval_util - INFO - Initialized Evaluation_Utility
+2025-01-14 16:20:02,593 - __main__ - INFO - Starting evaluation of responses
+2025-01-14 16:20:02,593 - src.agent.evaluation.eval_util - INFO - Starting evaluation
+2025-01-14 16:20:02,593 - src.agent.evaluation.eval_util - INFO - Performing RAG evaluation
+2025-01-14 16:20:02,593 - src.agent.evaluation.eval_util - INFO - Evaluating classifications...
+2025-01-14 16:20:02,593 - src.agent.evaluation.eval_util - INFO - Starting classification evaluation
+2025-01-14 16:20:02,602 - src.agent.evaluation.eval_util - INFO - Generating classification report
+2025-01-14 16:20:02,640 - src.agent.evaluation.eval_util - INFO - Generating confusion matrix
+2025-01-14 16:20:03,008 - src.agent.evaluation.eval_util - INFO - Calculating Matthews Correlation Coefficient
+2025-01-14 16:20:03,580 - src.agent.evaluation.eval_util - INFO - Classification evaluation completed successfully
+2025-01-14 16:20:03,581 - src.agent.evaluation.eval_util - INFO - Evaluating justifications...
+2025-01-14 16:20:03,581 - src.agent.evaluation.eval_util - INFO - Starting justification evaluation
+2025-01-14 16:20:03,616 - src.agent.evaluation.eval_util - INFO - Calculating ROUGE scores
+2025-01-14 16:20:04,058 - absl - INFO - Using default tokenizer.
+2025-01-14 16:20:21,823 - src.agent.evaluation.eval_util - INFO - Calculating BLEU scores
+2025-01-14 16:20:26,785 - src.agent.evaluation.eval_util - INFO - Starting toxicity analysis
+2025-01-14 17:22:21,995 - src.agent.evaluation.eval_util - INFO - Calculating toxicity statistics
+2025-01-14 17:22:22,038 - src.agent.evaluation.eval_util - INFO - Generating toxicity visualization
+2025-01-14 17:22:22,038 - src.agent.evaluation.eval_util - INFO - Generating toxicity score visualization
+2025-01-14 17:22:22,872 - src.agent.evaluation.eval_util - INFO - Toxicity plot saved to eval_results/01-14-2025_16-20-02/toxicity_plot.png
+2025-01-14 17:22:22,872 - src.agent.evaluation.eval_util - INFO - Justification evaluation completed successfully
+2025-01-14 17:22:23,121 - src.agent.evaluation.eval_util - INFO - Evaluating retrieval...
+2025-01-14 17:22:23,121 - src.agent.evaluation.eval_util - INFO - Starting retrieval evaluation
+2025-01-14 17:22:23,121 - src.agent.evaluation.eval_util - INFO - Processing retrieval evaluations
+2025-01-14 17:22:23,139 - src.agent.evaluation.eval_util - INFO - Calculating retrieval eval summary metrics
+2025-01-14 17:22:23,211 - src.agent.evaluation.eval_util - INFO - Retrieval evaluation completed successfully
+2025-01-14 17:22:23,212 - src.agent.evaluation.eval_util - INFO - Overall top document true class accuracy: 77.37%
+2025-01-14 17:22:23,212 - src.agent.evaluation.eval_util - INFO - Overall top document predicted class accuracy: 83.74%
+2025-01-14 17:22:23,212 - src.agent.evaluation.eval_util - INFO - Overall all documents true class accuracy: 77.51%
+2025-01-14 17:22:23,212 - src.agent.evaluation.eval_util - INFO - Overall all documents predicted class accuracy: 75.96%
+2025-01-14 17:22:23,212 - src.agent.evaluation.eval_util - INFO - 
+Metrics for NTA:
+2025-01-14 17:22:23,212 - src.agent.evaluation.eval_util - INFO -   Count: 8066
+2025-01-14 17:22:23,212 - src.agent.evaluation.eval_util - INFO -   Top document true class accuracy: 91.00%
+2025-01-14 17:22:23,212 - src.agent.evaluation.eval_util - INFO -   Top document predicted class accuracy: 88.26%
+2025-01-14 17:22:23,212 - src.agent.evaluation.eval_util - INFO -   All documents true class accuracy: 91.22%
+2025-01-14 17:22:23,212 - src.agent.evaluation.eval_util - INFO -   All documents predicted class accuracy: 81.24%
+2025-01-14 17:22:23,212 - src.agent.evaluation.eval_util - INFO - 
+Metrics for YTA:
+2025-01-14 17:22:23,212 - src.agent.evaluation.eval_util - INFO -   Count: 1107
+2025-01-14 17:22:23,212 - src.agent.evaluation.eval_util - INFO -   Top document true class accuracy: 18.79%
+2025-01-14 17:22:23,212 - src.agent.evaluation.eval_util - INFO -   Top document predicted class accuracy: 55.56%
+2025-01-14 17:22:23,212 - src.agent.evaluation.eval_util - INFO -   All documents true class accuracy: 19.17%
+2025-01-14 17:22:23,212 - src.agent.evaluation.eval_util - INFO -   All documents predicted class accuracy: 46.40%
+2025-01-14 17:22:23,212 - src.agent.evaluation.eval_util - INFO - 
+Metrics for NAH:
+2025-01-14 17:22:23,212 - src.agent.evaluation.eval_util - INFO -   Count: 376
+2025-01-14 17:22:23,212 - src.agent.evaluation.eval_util - INFO -   Top document true class accuracy: 7.71%
+2025-01-14 17:22:23,212 - src.agent.evaluation.eval_util - INFO -   Top document predicted class accuracy: 81.65%
+2025-01-14 17:22:23,212 - src.agent.evaluation.eval_util - INFO -   All documents true class accuracy: 6.86%
+2025-01-14 17:22:23,212 - src.agent.evaluation.eval_util - INFO -   All documents predicted class accuracy: 65.69%
+2025-01-14 17:22:23,212 - src.agent.evaluation.eval_util - INFO - 
+Metrics for ESH:
+2025-01-14 17:22:23,212 - src.agent.evaluation.eval_util - INFO -   Count: 260
+2025-01-14 17:22:23,212 - src.agent.evaluation.eval_util - INFO -   Top document true class accuracy: 4.62%
+2025-01-14 17:22:23,212 - src.agent.evaluation.eval_util - INFO -   Top document predicted class accuracy: 66.54%
+2025-01-14 17:22:23,212 - src.agent.evaluation.eval_util - INFO -   All documents true class accuracy: 2.85%
+2025-01-14 17:22:23,212 - src.agent.evaluation.eval_util - INFO -   All documents predicted class accuracy: 52.85%
+2025-01-14 17:22:23,214 - src.agent.evaluation.eval_util - INFO - Evaluation completed successfully
+2025-01-14 17:22:23,214 - __main__ - INFO - Evaluation process completed successfully
+2025-01-14 17:22:23,289 - __main__ - INFO - Script execution completed

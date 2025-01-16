@@ -8,9 +8,9 @@
             "module": "src.vector-store.vs_creation",
             "args": [
                 "--dataset", "MattBoraske/reddit-AITA-submissions-and-comments-multiclass",
-                "--index-name", "aita-text-embedding-3-large-v2",
+                "--index-name", "aita-text-embedding-3-large",
                 "--embed-provider", "openai",
-                "--embed-endpoint", "text-embedding-3-large",
+                 "--embed-endpoint", "text-embedding-3-large",
                 //"--keep-info"
             ],
             "justMyCode": true
@@ -24,24 +24,22 @@
                 "--log-level", "INFO",
                 "--timeout", "300",
                 "--llm-provider", "openai",
-                "--llm-endpoint", "gpt-4o-2024-11-20",               
-                "--embedding-model", "text-embedding-3-large",
-                "--pinecone-index", "aita-text-embedding-3-large-v2",
+                "--llm-endpoint", "gpt-4o-mini-2024-07-18",
+                "--embedding-provider", "openai",               
+                "--embedding-endpoint", "text-embedding-3-large",
+                "--pinecone-index", "aita-text-embedding-3-large",
                 "--docs-to-retrieve", "5",
                 "--dataset", "MattBoraske/reddit-AITA-submissions-and-comments-multiclass",
-                "--sampling", "weighted", // can also be complete or balanced
-                "--balanced-samples-per-class", "3", // only used when sampling is balanced
-                "--weighted-total-samples", "100", // only used when sampling is weighted
+                "--sampling", "complete", // can be complete, balanced, or weighted
+                "--run-eval", // if not present, will only run the response generation
                 "--eval-type", "RAG",
-                "--results-directory", "aita-text-embedding-3-large-v2-gpt-4o-2024-11-20-weighted-400-RAG",
+                "--phoenix-project", "RAG-2", // phoenix project to log LLM traces to
             ],
             "justMyCode": true
         },
     ]
 }
 
-// MODELS ENDPOINTS
-// OPENAI
-    // 4o : gpt-4o-2024-11-20
+// OPENAI MODELS ENDPOINTS
     // 4o-mini: gpt-4o-mini-2024-07-18
-    // o1-mini: o1-mini-2024-09-12
+    // 4o : gpt-4o-2024-11-20

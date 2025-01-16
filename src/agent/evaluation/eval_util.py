@@ -27,7 +27,9 @@ class Evaluation_Utility():
     def create_test_set(
         self, 
         df: pd.DataFrame, 
-        sampling: str = 'full', 
+        sampling: str = 'complete', 
+        total_samples_start: int = None,
+        total_samples_end: int = None,
         balanced_samples_per_class: int = None,
         weighted_total_samples: int = None
     ) -> list[dict]:
@@ -38,7 +40,7 @@ class Evaluation_Utility():
         Args:
             df (pd.DataFrame): DataFrame containing the test dataset
             sampling (str): Sampling strategy to use:
-                - 'full': Use entire dataset (default)
+                - 'complete': Use entire dataset (default)
                 - 'balanced': Equal samples per class, taking highest scored submissions
                 - 'weighted': Maintain class proportions with reduced size, taking highest scored submissions
             balanced_samples_per_class (int, optional): Number of samples per class when sampling='balanced'
@@ -92,9 +94,15 @@ class Evaluation_Utility():
                 self.logger.info(f"Created weighted test set with {len(df)} total samples")
                 self.logger.debug(f"Class distribution in weighted set: {df['top_comment_1_classification'].value_counts()}")
                 self.logger.debug(f"Class proportions in weighted set: {df['top_comment_1_classification'].value_counts(normalize=True)}")
-                
-            else:  # 'full' sampling
-                self.logger.info(f"Creating full test set from DataFrame with {len(df)} rows")
+            
+            elif sampling == 'complete':
+                # dataset subset to split up evaluation on long-running RAG workflows
+                if total_samples_end is not None and total_samples_start is not None:
+                    self.logger.debug("Creating subset of test set with samples {total_samples_start} to {total_samples_end}")
+                    df = df.iloc[total_samples_start:total_samples_end]
+                # complete dataset
+                else:
+                    self.logger.info(f"Creating full test set from DataFrame with {len(df)} rows")
 
             test_set = []
             for _, row in df.iterrows():
@@ -591,6 +599,9 @@ class Evaluation_Utility():
         self.logger.info("Starting retrieval evaluation")
         
         try:
+            # Do pre-prediction retrieval evaluation
+            self.logger.info("Processing retrieval evaluations")
+
             retrieval_evaluations = []
             total_responses = len(responses)
             
@@ -601,6 +612,7 @@ class Evaluation_Utility():
                 
                 # Get true classification and document classifications
                 true_classification = response['top_comment_classification']
+                predicted_classification = response['predicted_classification']
                 doc_classifications = [doc['classification'] for doc in response['retrieved_docs']]
                 
                 # Get top retrieved doc classification
@@ -612,27 +624,42 @@ class Evaluation_Utility():
                     classification_counts[classification] += 1
                 
                 # Calculate match ratio
-                correct_classification_ratio = (classification_counts[true_classification] / 
+                true_classification_ratio = (classification_counts[true_classification] / 
                                         len(doc_classifications))
+                predicted_classification_ratio = (classification_counts[predicted_classification] /
+                                            len(doc_classifications))
                 
                 # Store results
                 retrieval_evaluations.append({
                     'true_class': true_classification,
+                    'predicted_class': predicted_classification,
                     'top_doc_class': top_doc_classification,
                     'class_counts': classification_counts,
-                    'doc_class_match_accuracy': correct_classification_ratio
+                    'true_class_match_accuracy': true_classification_ratio,
+                    'predicted_class_match_accuracy': predicted_classification_ratio
                 })
             
-            # Calculate summary metrics
-            self.logger.info("Calculating retrieval summary metrics")
+            # Do overall retrieval evaluation
+            self.logger.info("Calculating retrieval eval summary metrics")
             
-            # Calculate overall metrics
-            overall_top_accuracy = sum(
+            # average true class top doc match ccuracy
+            avg_top_doc_true_class_match_ratio = sum(
                 x['top_doc_class'] == x['true_class'] for x in retrieval_evaluations
             ) / len(retrieval_evaluations)
+
+            # average predicted class top doc match accuracy
+            avg_top_doc_predicted_class_match_ratio = sum(
+                x['top_doc_class'] == x['predicted_class'] for x in retrieval_evaluations
+            ) / len(retrieval_evaluations)
             
-            overall_doc_accuracy = sum(
-                x['doc_class_match_accuracy'] for x in retrieval_evaluations
+            # average true class match all docs accuracy
+            avg_all_docs_true_class_match_ratio = sum(
+                x['true_class_match_accuracy'] for x in retrieval_evaluations
+            ) / len(retrieval_evaluations)
+
+            # average predicted class matchs all docs accuracy
+            avg_all_docs_predicted_class_match_ratio = sum(
+                x['predicted_class_match_accuracy'] for x in retrieval_evaluations
             ) / len(retrieval_evaluations)
             
             # Calculate per-class metrics
@@ -644,56 +671,70 @@ class Evaluation_Utility():
                 if class_evals:  # Only calculate if we have examples for this class
                     class_metrics[classification] = {
                         'num_conflicts': len(class_evals),
-                        'top_doc_accuracy': sum(
+                        'top_doc_true_class_match_accuracy': sum(
                             x['top_doc_class'] == x['true_class'] for x in class_evals
                         ) / len(class_evals),
-                        'avg_doc_accuracy': sum(
-                            x['doc_class_match_accuracy'] for x in class_evals
+                        'top_doc_predicted_class_match_accuracy': sum(
+                            x['top_doc_class'] == x['predicted_class'] for x in class_evals
+                        ) / len(class_evals),
+                        'all_docs_true_class_match_accuracy': sum(
+                            x['true_class_match_accuracy'] for x in class_evals
+                        ) / len(class_evals),
+                        'all_docs_predicted_class_match_accuracy': sum(
+                            x['predicted_class_match_accuracy'] for x in class_evals
                         ) / len(class_evals)
                     }
                 else:
                     class_metrics[classification] = {
-                        'num_conflicts': 0,
-                        'top_doc_accuracy': 0.0,
-                        'avg_doc_accuracy': 0.0
+                        'num_conflicts': None,
+                        'top_doc_true_class_match_accuracy': None,
+                        'top_doc_predicted_class_match_accuracy': None,
+                        'all_docs_true_class_match_accuracy': None,
+                        'all_docs_predicted_class_match_accuracy': None
                     }
             
             # Combine all metrics
             summary_results = {
                 'overall_metrics': {
                     'total_conflicts': len(retrieval_evaluations),
-                    'avg_top_doc_class_match_accuracy': overall_top_accuracy,
-                    'avg_doc_class_match_accuracy': overall_doc_accuracy
+                    'top_doc_true_class_match_accuracy': avg_top_doc_true_class_match_ratio,
+                    'top_doc_predicted_class_match_accuracy': avg_top_doc_predicted_class_match_ratio,
+                    'all_docs_true_class_match_accuracy': avg_all_docs_true_class_match_ratio,
+                    'all_docs_predicted_class_match_accuracy': avg_all_docs_predicted_class_match_ratio
                 },
                 'per_class_metrics': class_metrics
             }
             
             # Save detailed results
-            self.logger.debug("Saving detailed retrieval evaluation")
+            self.logger.debug("Saving per-prediction retrieval evaluation")
             eval_path = os.path.join(results_directory, retrieval_eval_filepath)
             with open(eval_path, 'w') as f:
                 json.dump(retrieval_evaluations, f)
-            self.logger.debug(f"Detailed retrieval evaluation saved to {eval_path}")
+            self.logger.debug(f"Per-prediction retrieval evaluation saved to {eval_path}")
             
             # Save summary results
-            self.logger.debug("Saving retrieval summary metrics")
+            self.logger.debug("Saving overall retrieval evaluation")
             summary_path = os.path.join(results_directory, retrieval_eval_summary_filepath)
             with open(summary_path, 'w') as f:
                 json.dump(summary_results, f)
-            self.logger.debug(f"Retrieval summary metrics saved to {summary_path}")
+            self.logger.debug(f"Overall retrieval evaluation saved to {summary_path}")
             
             # Log overall results
             self.logger.info("Retrieval evaluation completed successfully")
-            self.logger.info(f"Overall top document classification accuracy: {overall_top_accuracy:.2%}")
-            self.logger.info(f"Overall average document classification accuracy: {overall_doc_accuracy:.2%}")
+            self.logger.info(f"Overall top document true class accuracy: {avg_top_doc_true_class_match_ratio:.2%}")
+            self.logger.info(f"Overall top document predicted class accuracy: {avg_top_doc_predicted_class_match_ratio:.2%}")
+            self.logger.info(f"Overall all documents true class accuracy: {avg_all_docs_true_class_match_ratio:.2%}")
+            self.logger.info(f"Overall all documents predicted class accuracy: {avg_all_docs_predicted_class_match_ratio:.2%}")
             
             # Log per-class results
             for classification, metrics in class_metrics.items():
                 self.logger.info(f"\nMetrics for {classification}:")
                 self.logger.info(f"  Count: {metrics['num_conflicts']}")
-                self.logger.info(f"  Top document accuracy: {metrics['top_doc_accuracy']:.2%}")
-                self.logger.info(f"  Average document accuracy: {metrics['avg_doc_accuracy']:.2%}")
-        
+                self.logger.info(f"  Top document true class accuracy: {metrics['top_doc_true_class_match_accuracy']:.2%}")
+                self.logger.info(f"  Top document predicted class accuracy: {metrics['top_doc_predicted_class_match_accuracy']:.2%}")
+                self.logger.info(f"  All documents true class accuracy: {metrics['all_docs_true_class_match_accuracy']:.2%}")
+                self.logger.info(f"  All documents predicted class accuracy: {metrics['all_docs_predicted_class_match_accuracy']:.2%}")
+
         except Exception as e:
             self.logger.error(f"Error during retrieval evaluation: {str(e)}", exc_info=True)
             raise

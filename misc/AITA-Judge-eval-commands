@@ -1,0 +1,61 @@
+# BASIC 1: 4o
+
+python -m src.agent.evaluation.agent_eval \
+    --log-level INFO \
+    --timeout 300 \
+    --llm-provider openai \
+    --llm-endpoint gpt-4o-2024-11-20 \
+    --dataset MattBoraske/reddit-AITA-submissions-and-comments-multiclass \
+    --sampling complete \
+    --run-eval \
+    --eval-type BASIC
+    --phoenix-project BASIC-1
+
+# BASIC 2: 4o-mini
+
+python -m src.agent.evaluation.agent_eval \
+    --log-level INFO \
+    --timeout 300 \
+    --llm-provider openai \
+    --llm-endpoint gpt-4o-mini-2024-07-18 \
+    --dataset MattBoraske/reddit-AITA-submissions-and-comments-multiclass \
+    --sampling complete \
+    ---run-eval \
+    --eval-type BASIC
+    --phoenix-project BASIC-2
+
+# RAG 1: 4o text-embedding-3-large
+# can use --complete-total-samples-start and --complete-total-samples-end to specify a range of samples to evaluate
+    # if doing this, don't set the run-eval flag to true and instead run eval after having responses for all samples
+python -m src.agent.evaluation.agent_eval \
+    --log-level INFO \
+    --timeout 300 \
+    --llm-provider openai \
+    --llm-endpoint gpt-4o-2024-11-20 \
+    --embedding-provider openai \
+    --embedding-endpoint text-embedding-3-large \
+    --pinecone-index aita-text-embedding-3-large \
+    --docs-to-retrieve 5 \
+    --dataset MattBoraske/reddit-AITA-submissions-and-comments-multiclass \
+    --sampling complete \
+    --run-eval \
+    --eval-type RAG \
+    --phoenix-project RAG-1
+
+
+# RAG 2: 4o-mini text-embedding-3-large
+
+python -m src.agent.evaluation.agent_eval \
+    --log-level INFO \
+    --timeout 300 \
+    --llm-provider openai \
+    --llm-endpoint gpt-4o-mini-2024-07-18 \
+    --embedding-provider openai \
+    --embedding-endpoint text-embedding-3-large \
+    --pinecone-index aita-text-embedding-3-large \
+    --docs-to-retrieve 5 \
+    --dataset MattBoraske/reddit-AITA-submissions-and-comments-multiclass \
+    --sampling complete \
+    --run-eval \
+    --eval-type RAG \
+    --phoenix-project RAG-2

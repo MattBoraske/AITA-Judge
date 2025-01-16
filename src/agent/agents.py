@@ -39,7 +39,7 @@ class AITA_Basic_Agent(Workflow):
     self,
     timeout=60,
     llm_provider='openai',
-    llm_endpoint='gpt-4o-mini'
+    llm_endpoint='gpt-4o-mini',
   ):
     super().__init__(timeout=timeout)
     self.LLM_PROVIDER = llm_provider
@@ -53,10 +53,12 @@ class AITA_Basic_Agent(Workflow):
     """Entry point for the agent"""
     #print('BEGIN GET RESPONSE EVENT')
 
-    if self.LLM_PROVIDER == 'groq':
-      llm = Groq(model='gpt-4o-mini', api_key=os.getenv('GROQ_API_KEY'))
+    if self.LLM_PROVIDER == 'openai':
+      llm = OpenAI(model=self.LLM_ENDPOINT, api_key=os.getenv('OPENAI_API_KEY'))
+    elif self.LLM_PROVIDER == 'groq':
+      llm = Groq(model=self.LLM_ENDPOINT, api_key=os.getenv('GROQ_API_KEY'))
     else:
-      llm = OpenAI(model='gpt-4o-mini', api_key=os.getenv('OPENAI_API_KEY'))
+      raise NotImplementedError('Only OpenAI and Groq are currently supported as LLM providers.')
     
     prompt_template = self.prompts['AITA_text_qa_template']
     prompt = prompt_template.format(query_str=ev.get('query'))
@@ -72,6 +74,7 @@ class AITA_RAG_Agent(Workflow):
       timeout=60,
       llm_provider='openai',
       llm_endpoint='gpt-4o-mini',
+      embedding_provider='openai',
       embedding_model_endpoint='text-embedding-3-small',
       pinecone_vector_index='aita-text-embedding-3-small-v2',
       docs_to_retrieve=5
@@ -79,6 +82,7 @@ class AITA_RAG_Agent(Workflow):
       super().__init__(timeout=timeout)
       self.LLM_PROVIDER = llm_provider
       self.LLM_ENDPOINT  = llm_endpoint
+      self.EMBEDDING_PROVIDER = embedding_provider
       self.EMBEDDING_MODEL_ENDPOINT = embedding_model_endpoint
       self.PINECONE_VECTOR_INDEX  = pinecone_vector_index
       self.DOCS_TO_RETRIEVE  = docs_to_retrieve
@@ -100,7 +104,11 @@ class AITA_RAG_Agent(Workflow):
     await ctx.set("query", query)
 
     # get embedding model
-    embed_model = OpenAIEmbedding(model=self.EMBEDDING_MODEL_ENDPOINT, api_key=os.getenv('OPENAI_API_KEY'))
+    if self.EMBEDDING_PROVIDER == 'openai':
+      # get embedding model using OpenAI API key stored in environment variable
+      embed_model = OpenAIEmbedding(model=self.EMBEDDING_MODEL_ENDPOINT, api_key=os.getenv('OPENAI_API_KEY'))
+    else:
+      raise NotImplementedError('Only OpenAI embeddings are currently supported.')
 
     # get pinecone vectorstore
     pc = Pinecone(api_key=os.getenv('PINECONE_API_KEY'))
@@ -139,10 +147,12 @@ class AITA_RAG_Agent(Workflow):
     """Return a streaming response using reranked nodes"""
     #print('BEGIN SYNTHESIZE EVENT')
 
-    if self.LLM_PROVIDER == 'groq':
-      llm = Groq(model=self.LLM_ENDPOINT, api_key=os.getenv('GROQ_API_KEY'))
-    else: # openai is default
+    if self.LLM_PROVIDER == 'openai':
       llm = OpenAI(model=self.LLM_ENDPOINT, api_key=os.getenv('OPENAI_API_KEY'))
+    elif self.LLM_PROVIDER == 'groq':
+      llm = Groq(model=self.LLM_ENDPOINT, api_key=os.getenv('GROQ_API_KEY'))
+    else:
+      raise NotImplementedError('Only OpenAI and Groq are currently supported as LLM providers.')
 
     response_synthesizer = get_response_synthesizer(
       response_mode="refine",
