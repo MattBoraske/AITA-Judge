@@ -6,7 +6,7 @@ text_qa_template = AITA_Prompt_Library.PROMPTS['AITA_text_qa_template']
 
 
 prompt = text_qa_template.format(
-    query_str="QUERY STRING"
+    query_str="STRING"
 )
 
 print(prompt)
